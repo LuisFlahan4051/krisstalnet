@@ -1,23 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+const { BrowserWindow } = window.require('electron').remote; 
+//You need to add nodeIntegration: true, in to webPreferences in starter-electron.ts and conserv de { } in the import.
+
+
+function createFramelessWindow() {
+  let win = new BrowserWindow({ width: 800, height: 600, frame: false })
+  win.show()
+}
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <p>Hello React and Electron</p>
+        <button onClick={createFramelessWindow}>Frameless window!</button>
       </header>
     </div>
   );
