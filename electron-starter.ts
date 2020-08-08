@@ -2,59 +2,68 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
 
+// ------------------ Windows ---------------------------
+async function framelessWindow () {
+  console.log('Creando frameless-window...')
 
-function createWindow () {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    
-    
-    webPreferences: {
-      nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
-    }
+  const win = new BrowserWindow({ 
+    width: 600, 
+    height: 380, 
+    frame: false, 
+    resizable: false, 
+    icon: 'public/logo192.png' 
   })
-
-  // and load the index.html of the app.
-  //mainWindow.loadFile('index.html')
-  mainWindow.loadURL('http://localhost:3000');
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  win.loadFile('public/welcome.html')
+  win.show()
+  //win.webContents.openDevTools()
+  
+  console.log('Listo!')
+  
+  sleep(4000).then(() => { 
+    win.close()
+  });
 }
 
 
+async function mainWindow() {
+  console.log('Creando ventana principal...')
 
-/* 
-const framelessWindowBtn = document.getElementById("framelessWindowBtn")
-framelessWindowBtn.addEventListener('click', () => {createFramelessWindow()})
+  sleep(3000).then(() => {
+    const mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      icon: 'public/logo192.png',
+      webPreferences: {
+        nodeIntegration: true,
+        preload: path.join(__dirname, 'preload.js')
+      }
+    })
 
- */
+    //mainWindow.loadFile('index.html')
+    //mainWindow.loadURL(`file://${__dirname}/app/index.html`)
+    mainWindow.loadURL('http://localhost:3000');
+
+  // mainWindow.webContents.openDevTools()
+    console.log('Listo!')
+  });
+}
 
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+//-------------------- MAIN --------------------------------
 app.whenReady().then(() => {
-  createWindow()
-  //createFramelessWindow()
+  framelessWindow()
+  mainWindow()
   
+  // Prevenir abrir varias ventanas en MacOS
   app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) mainWindow()
   })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Configuraciones de cierre para MacOS
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="717.205" height="256.75" viewBox="0 0 717.205 256.75">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #ff26a5;
+      }
+
+      .cls-3 {
+        font-size: 167px;
+        font-family: FreestyleScript-Regular, Freestyle Script;
+      }
+
+      .cls-4, .cls-6 {
+        fill: #00fff0;
+      }
+
+      .cls-4 {
+        font-size: 102px;
+        font-family: SegoeUI, Segoe UI;
+      }
+
+      .cls-5 {
+        fill: #ff0095;
+        font-size: 68px;
+      }
+
+      .cls-7 {
+        filter: url(#Elipse_1);
+      }
+
+      .cls-8 {
+        filter: url(#Rectángulo_1);
+      }
+    </style>
+    <filter id="Rectángulo_1" x="98.205" y="51.529" width="619" height="164.75" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Elipse_1" x="0" y="0" width="256.75" height="256.75" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7.5" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="LogoX680" transform="translate(-6.587 22.734)">
+    <g class="cls-8" transform="matrix(1, 0, 0, 1, 6.59, -22.73)">
+      <rect id="Rectángulo_1-2" data-name="Rectángulo 1" class="cls-1" width="589" height="134.75" rx="67.375" transform="translate(113.2 66.53)"/>
+    </g>
+    <g class="cls-7" transform="matrix(1, 0, 0, 1, 6.59, -22.73)">
+      <circle id="Elipse_1-2" data-name="Elipse 1" class="cls-2" cx="105.875" cy="105.875" r="105.875" transform="translate(22.5 22.5)"/>
+    </g>
+    <text id="K" class="cls-3" transform="translate(71.6 153.813)"><tspan x="0" y="0">K</tspan></text>
+    <text id="RISSTALNET." class="cls-4" transform="translate(151.679 143.897)"><tspan x="0" y="0">RISSTAL</tspan><tspan class="cls-5" y="0">NET.</tspan></text>
+    <g id="penacho" transform="translate(596.915 49.372)">
+      <path id="Trazado_1" data-name="Trazado 1" class="cls-6" d="M0,19.261c44.623-40.843,42.354-4.034,42.354-4.034Z" transform="matrix(0.996, 0.087, -0.087, 0.996, 26.96, 26.742)"/>
+      <path id="Trazado_2" data-name="Trazado 2" class="cls-6" d="M0,19.261c44.623-40.843,42.354-4.034,42.354-4.034Z" transform="matrix(0.819, -0.574, 0.574, 0.819, 10.605, 30.129)"/>
+      <path id="Trazado_3" data-name="Trazado 3" class="cls-6" d="M0,19.261c44.623-40.843,42.354-4.034,42.354-4.034Z" transform="matrix(0.259, -0.966, 0.966, 0.259, 0, 40.929)"/>
+    </g>
+  </g>
+</svg>

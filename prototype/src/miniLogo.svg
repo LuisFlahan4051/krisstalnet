@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1535.25" height="1254.5" viewBox="0 0 1535.25 1254.5">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ff26a5;
+      }
+
+      .cls-2, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 1000px;
+        font-family: FreestyleScript-Regular, Freestyle Script;
+      }
+
+      .cls-3 {
+        fill: #00fff0;
+      }
+
+      .cls-5 {
+        filter: url(#Elipse_3);
+      }
+
+      .cls-6 {
+        filter: url(#Elipse_2);
+      }
+    </style>
+    <filter id="Elipse_2" x="0" y="0" width="1190" height="1190" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Elipse_3" x="755.25" y="432.75" width="780" height="780" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="30" result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="miniLogo" transform="translate(-90.75 1431.75)">
+    <g id="Grupo_1" data-name="Grupo 1" transform="translate(175.75 -94.75)">
+      <g class="cls-6" transform="matrix(1, 0, 0, 1, -85, -1337)">
+        <circle id="Elipse_2-2" data-name="Elipse 2" class="cls-1" cx="550" cy="550" r="550" transform="translate(45 45)"/>
+      </g>
+      <text id="K" class="cls-2" transform="translate(195.5 -409.5)"><tspan x="0" y="0">K</tspan></text>
+    </g>
+    <g class="cls-5" transform="matrix(1, 0, 0, 1, 90.75, -1431.75)">
+      <circle id="Elipse_3-2" data-name="Elipse 3" class="cls-3" cx="300" cy="300" r="300" transform="translate(845.25 522.75)"/>
+    </g>
+    <g id="penacho" transform="translate(-1919 -1023)">
+      <path id="Trazado_1" data-name="Trazado 1" class="cls-4" d="M1691.711-446.957c231.68-212.053,219.9-20.944,219.9-20.944Z" transform="matrix(0.996, 0.087, -0.087, 0.996, 1382.558, 821.086)"/>
+      <path id="Trazado_2" data-name="Trazado 2" class="cls-4" d="M1691.711-446.957c231.68-212.053,219.9-20.944,219.9-20.944Z" transform="matrix(0.819, -0.574, 0.574, 0.819, 1958.54, 1859.605)"/>
+      <path id="Trazado_3" data-name="Trazado 3" class="cls-4" d="M1691.711-446.957c231.68-212.053,219.9-20.944,219.9-20.944Z" transform="matrix(0.259, -0.966, 0.966, 0.259, 3066, 2272.946)"/>
+    </g>
+  </g>
+</svg>
