@@ -1,7 +1,6 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
-
 const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
 
@@ -29,16 +28,16 @@ async function framelessWindow () {
 
 
 async function mainWindow() {
-  console.log('Creando ventana principal...')
+  console.log('Creando ventana de inicio...')
 
   sleep(3000).then(() => {
     const mainWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 1000,
+      height: 700,
       icon: 'public/logo192.png',
       webPreferences: {
         nodeIntegration: true,
-        preload: path.join(__dirname, 'preload.js')
+        //preload: path.join(__dirname, 'preload.js')
       }
     })
 
@@ -46,7 +45,7 @@ async function mainWindow() {
     //mainWindow.loadURL(`file://${__dirname}/app/index.html`)
     mainWindow.loadURL('http://localhost:3000');
 
-  // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
     console.log('Listo!')
   });
 }

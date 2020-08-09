@@ -1,21 +1,46 @@
 import React from 'react';
 import './App.scss';
-const { BrowserWindow } = window.require('electron').remote; 
-//You need to add nodeIntegration: true, in to webPreferences in starter-electron.ts and conserv de { } in the import.
+import Login  from './components/Login/index';
+import Responsiva from './components/Responsiva/index'
 
+/* const { BrowserWindow } = window.require('electron').remote; 
+const remote = window.require('electron').remote; 
+function mainWindow() {
+  console.log('Creando ventana de inicio...')
 
-function createFramelessWindow() {
-  let win = new BrowserWindow({ width: 800, height: 600, frame: false })
-  win.show()
-}
+  const mainWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    icon: 'public/logo192.png',
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+    }
+  })
+
+  //mainWindow.loadFile('index.html')
+  //mainWindow.loadURL(`file://${__dirname}/app/index.html`)
+  mainWindow.loadURL('http://localhost:3000/welcome.html');
+
+  mainWindow.webContents.openDevTools()
+  console.log('Listo!')
+
+  var secondWin = remote.getCurrentWindow()
+  secondWin.close()
+}*/
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      
+      <Login />
+      <Responsiva />
+
+      
+      {/* <header className="App-header">
         <p>Hello React and Electron</p>
-        <button onClick={createFramelessWindow}>Frameless window!</button>
-      </header>
+        <button onClick={mainWindow}>Frameless window!</button>
+      </header> */}
     </div>
   );
 }
