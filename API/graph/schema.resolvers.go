@@ -1,22 +1,36 @@
-package graphql
+package graph
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
 
 import (
 	"context"
-	"fmt"
+	"log"
 
-	"github.com/LuisFlahan4051/krisstalnet/API/graphql/generated"
-	"github.com/LuisFlahan4051/krisstalnet/API/graphql/model"
+	"github.com/LuisFlahan4051/krisstalnet/API/database"
+	"github.com/LuisFlahan4051/krisstalnet/API/graph/generated"
+	"github.com/LuisFlahan4051/krisstalnet/API/graph/model"
 )
 
+var db = database.Connect()
+
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
+	//panic(fmt.Errorf("not implemented"))
+	todo := &model.Todo{
+		Text: input.Text,
+		ID:   input.UserID,
+		User: &model.User{ID: input.UserID, Name: "user " + input.UserID},
+	}
+	r.todos = append(r.todos, todo)
+	return todo, nil
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
+	ping := db.client.Ping(context.TODO(), nil)
+	if ping != nil {
+		log.Println(ping)
+	}
+	return r.todos, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
