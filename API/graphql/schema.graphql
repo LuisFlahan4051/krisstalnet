@@ -1,4 +1,8 @@
-type PorHacer {
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Todo {
   id: ID!
   text: String!
   done: Boolean!
@@ -11,14 +15,14 @@ type User {
 }
 
 type Query {
-  todos: [PorHacer!]!
+  todos: [Todo!]!
 }
 
-input NewPorHacer {
+input NewTodo {
   text: String!
   userId: String!
 }
 
 type Mutation {
-  createPorHacer(input: NewPorHacer!): PorHacer!
+  createTodo(input: NewTodo!): Todo!
 }

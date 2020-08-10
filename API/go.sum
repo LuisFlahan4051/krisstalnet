@@ -1,7 +1,7 @@
 github.com/99designs/gqlgen v0.11.3 h1:oFSxl1DFS9X///uHV3y6CEfpcXWrDUxVblR4Xib2bs4=
 github.com/99designs/gqlgen v0.11.3/go.mod h1:RgX5GRRdDWNkh4pBrdzNpNPFVsdoUFY2+adM6nb1N+4=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/LuisFlahan4051/krisstalnet v0.0.0-20200809093720-3acf786e92b6 h1:qiUJwr5EKoeUtfL5gbiyijhnKpanqWwwaD/m/0i3U6g=
+github.com/LuisFlahan4051/krisstalnet v0.0.0-20200809110623-fa0f87b21ea7 h1:LWGuDK3IDrJjgFrrpuPElswX1LNUl+RPUFYvX8+JIUc=
 github.com/agnivade/levenshtein v1.0.1/go.mod h1:CURSv5d9Uaml+FovSIICkLbAUZ9S4RqaHDIsdSBg7lM=
 github.com/agnivade/levenshtein v1.0.3 h1:M5ZnqLOoZR8ygVq0FfkXsNOKzMCk0xRiow0R5+5VkQ0=
 github.com/agnivade/levenshtein v1.0.3/go.mod h1:4SFRZbbXWLF4MU1T9Qg0pGgH3Pjs+t6ie5efyrwRJXs=

@@ -11,11 +11,11 @@ import (
 	"github.com/LuisFlahan4051/krisstalnet/API/graphql/model"
 )
 
-func (r *mutationResolver) CreatePorHacer(ctx context.Context, input model.NewPorHacer) (*model.PorHacer, error) {
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.PorHacer, error) {
+func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
