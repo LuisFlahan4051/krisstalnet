@@ -3,14 +3,13 @@ package database
 import (
 	"context"
 	"log"
-	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Database struct {
-	client *mongo.Client
+	Client *mongo.Client
 }
 
 func Connect() *Database {
@@ -31,16 +30,14 @@ func Connect() *Database {
 	if err != nil {
 		log.Println(err)
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	
-	err = client.Connect(ctx)
+
+	err = client.Connect(context.TODO())
 	if err != nil {
 		log.Println(err)
 	}
 	log.Println("Connect to MongoDB Succesfully!")
 
 	return &Database{
-		client: client,
+		Client: client,
 	}
 }

@@ -2,27 +2,72 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
+type Sucursal {
   id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
+  nombre: String!
+  direccion: String!
+  productos: [Producto!]!
+  usuarios: [Usuario!]!
+  responsivas: [Responsiva!]!
 }
 
-type User {
+type Usuario {
   id: ID!
-  name: String!
+  nombre: String!
+  admin: Boolean!
+  root: Boolean!
+}
+
+type Producto {
+  id: ID!
+  nombre: String!
+  descripcion: String
+  precio: float!
+}
+
+type Observacion{
+  descripcion: String
+  egreso: float
+}
+
+type Caja {
+  monedas50centavos: float
+  monedas1Peso: float
+  monedas2Pesos: float
+  monedas5Pesos: float
+  monedas10Pesos: float
+  monedas20Pesos: float
+  billetes20: float
+  billetes50: float
+  billetes100: float
+  billetes200: float
+  billetes500: float
+  billetes1000: float
+}
+
+type Responsiva{
+  numeroCaja: int!
+  fechaEntrada: String!
+  fechaSalida: String!
+  usuarioEncargado: Usuario!
+  usuarioReceptor: Usuario!
+  productos: [Producto!]!
+  productosVendidos: [Producto]
+  observaciones: [Observacion]
+  caja: Caja
 }
 
 type Query {
-  todos: [Todo!]!
+  usuarios: [Usuario!]!
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
+input NuevoUsuario {
+  id: ID!
+  nombre: String!
+  admin: Boolean!
+  root: Boolean!
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  crearUsuario(input: NuevoUsuario!): Usuario!
 }
