@@ -2,7 +2,18 @@
 
 package model
 
-type Caja struct {
+type ActualizarArticulo struct {
+	ID          string  `json:"id"`
+	Nombre      *string `json:"nombre"`
+	Descripcion *string `json:"descripcion"`
+	Stok        *int    `json:"stok"`
+	Tipo        *string `json:"tipo"`
+	Sucursal    *string `json:"sucursal"`
+	NumeroCaja  *int    `json:"numeroCaja"`
+}
+
+type ActualizarCaja struct {
+	ID                string   `json:"id"`
 	Monedas50centavos *float64 `json:"monedas50centavos"`
 	Monedas1Peso      *float64 `json:"monedas1Peso"`
 	Monedas2Pesos     *float64 `json:"monedas2Pesos"`
@@ -15,52 +26,135 @@ type Caja struct {
 	Billetes200       *float64 `json:"billetes200"`
 	Billetes500       *float64 `json:"billetes500"`
 	Billetes1000      *float64 `json:"billetes1000"`
+	NumeroCaja        int      `json:"numeroCaja"`
 }
 
-type ModificarUsuario struct {
-	ID     string  `json:"id"`
-	Nombre *string `json:"nombre"`
-	Mail   *string `json:"mail"`
-	Nick   string  `json:"nick"`
-	Pass   string  `json:"pass"`
-	Admin  *bool   `json:"admin"`
-	Root   *bool   `json:"root"`
+type ActualizarContadorCopia struct {
+	ID               string  `json:"id"`
+	Papel            *int    `json:"papel"`
+	CopiasBn         *int    `json:"copiasBN"`
+	CopiasColor      *int    `json:"copiasColor"`
+	ImpresionesBn    *int    `json:"impresionesBN"`
+	ImpresionesColor *int    `json:"impresionesColor"`
+	Sucursal         *string `json:"sucursal"`
+	NumeroCaja       *int    `json:"numeroCaja"`
 }
 
-type Observacion struct {
+type ActualizarObservacion struct {
+	ID          string   `json:"id"`
 	Descripcion *string  `json:"descripcion"`
 	Egreso      *float64 `json:"egreso"`
+	NumeroCaja  int      `json:"numeroCaja"`
 }
 
-type Producto struct {
+type ActualizarProducto struct {
 	ID          string   `json:"id"`
 	Nombre      *string  `json:"nombre"`
 	Descripcion *string  `json:"descripcion"`
 	Precio      *float64 `json:"precio"`
+	Stock       *int     `json:"stock"`
+	Sucursal    *string  `json:"sucursal"`
+	NumeroCaja  *int     `json:"numeroCaja"`
 }
 
-type Responsiva struct {
-	NumeroCaja        int            `json:"numeroCaja"`
-	FechaEntrada      *string        `json:"fechaEntrada"`
-	FechaSalida       *string        `json:"fechaSalida"`
-	UsuarioEncargado  *Usuario       `json:"usuarioEncargado"`
-	UsuarioReceptor   *Usuario       `json:"usuarioReceptor"`
-	Productos         []*Producto    `json:"productos"`
-	ProductosVendidos []*Producto    `json:"productosVendidos"`
-	Observaciones     []*Observacion `json:"observaciones"`
-	Caja              *Caja          `json:"caja"`
+type ActualizarResponsiva struct {
+	ID                    string  `json:"id"`
+	NumeroCaja            int     `json:"numeroCaja"`
+	FechaEntrada          *string `json:"fechaEntrada"`
+	FechaSalida           *string `json:"fechaSalida"`
+	VerificacionArticulos *bool   `json:"verificacionArticulos"`
+	ReporteFaltante       *bool   `json:"reporteFaltante"`
+	Sucursal              *string `json:"sucursal"`
 }
 
-type Sucursal struct {
-	ID          string        `json:"id"`
-	Nombre      *string       `json:"nombre"`
-	Direccion   *string       `json:"direccion"`
-	Productos   []*Producto   `json:"productos"`
-	Usuarios    []*Usuario    `json:"usuarios"`
-	Responsivas []*Responsiva `json:"responsivas"`
+type ActualizarSucursal struct {
+	ID        string  `json:"id"`
+	Nombre    string  `json:"nombre"`
+	Direccion *string `json:"direccion"`
 }
 
-type Usuario struct {
+type ActualizarUsuario struct {
+	ID     string  `json:"id"`
+	Nombre *string `json:"nombre"`
+	Mail   *string `json:"mail"`
+	Nick   *string `json:"nick"`
+	Pass   string  `json:"pass"`
+	Admin  *bool   `json:"admin"`
+	Root   *bool   `json:"root"`
+}
+
+type AgregarArticulo struct {
+	ID          string  `json:"id"`
+	Nombre      string  `json:"nombre"`
+	Descripcion *string `json:"descripcion"`
+	Stok        *int    `json:"stok"`
+	Tipo        *string `json:"tipo"`
+	Sucursal    *string `json:"sucursal"`
+	NumeroCaja  *int    `json:"numeroCaja"`
+}
+
+type AgregarCaja struct {
+	ID                string   `json:"id"`
+	Monedas50centavos *float64 `json:"monedas50centavos"`
+	Monedas1Peso      *float64 `json:"monedas1Peso"`
+	Monedas2Pesos     *float64 `json:"monedas2Pesos"`
+	Monedas5Pesos     *float64 `json:"monedas5Pesos"`
+	Monedas10Pesos    *float64 `json:"monedas10Pesos"`
+	Monedas20Pesos    *float64 `json:"monedas20Pesos"`
+	Billetes20        *float64 `json:"billetes20"`
+	Billetes50        *float64 `json:"billetes50"`
+	Billetes100       *float64 `json:"billetes100"`
+	Billetes200       *float64 `json:"billetes200"`
+	Billetes500       *float64 `json:"billetes500"`
+	Billetes1000      *float64 `json:"billetes1000"`
+	NumeroCaja        int      `json:"numeroCaja"`
+}
+
+type AgregarContadorCopia struct {
+	ID               string  `json:"id"`
+	Papel            *int    `json:"papel"`
+	CopiasBn         *int    `json:"copiasBN"`
+	CopiasColor      *int    `json:"copiasColor"`
+	ImpresionesBn    *int    `json:"impresionesBN"`
+	ImpresionesColor *int    `json:"impresionesColor"`
+	Sucursal         *string `json:"sucursal"`
+	NumeroCaja       *int    `json:"numeroCaja"`
+}
+
+type AgregarObservacion struct {
+	ID          string   `json:"id"`
+	Descripcion *string  `json:"descripcion"`
+	Egreso      *float64 `json:"egreso"`
+	NumeroCaja  int      `json:"numeroCaja"`
+}
+
+type AgregarProducto struct {
+	ID          string   `json:"id"`
+	Nombre      string   `json:"nombre"`
+	Descripcion *string  `json:"descripcion"`
+	Precio      *float64 `json:"precio"`
+	Stock       *int     `json:"stock"`
+	Sucursal    *string  `json:"sucursal"`
+	NumeroCaja  *int     `json:"numeroCaja"`
+}
+
+type AgregarResponsiva struct {
+	ID                    string  `json:"id"`
+	NumeroCaja            int     `json:"numeroCaja"`
+	FechaEntrada          string  `json:"fechaEntrada"`
+	FechaSalida           *string `json:"fechaSalida"`
+	VerificacionArticulos *bool   `json:"verificacionArticulos"`
+	ReporteFaltante       *bool   `json:"reporteFaltante"`
+	Sucursal              string  `json:"sucursal"`
+}
+
+type AgregarSucursal struct {
+	ID        string  `json:"id"`
+	Nombre    string  `json:"nombre"`
+	Direccion *string `json:"direccion"`
+}
+
+type AgregarUsuario struct {
 	ID     string  `json:"id"`
 	Nombre *string `json:"nombre"`
 	Mail   *string `json:"mail"`
@@ -68,4 +162,134 @@ type Usuario struct {
 	Pass   string  `json:"pass"`
 	Admin  *bool   `json:"admin"`
 	Root   *bool   `json:"root"`
+}
+
+type Articulo struct {
+	ID          string  `json:"id"`
+	Nombre      string  `json:"nombre"`
+	Descripcion *string `json:"descripcion"`
+	Stok        *int    `json:"stok"`
+	Tipo        *string `json:"tipo"`
+	Sucursal    *string `json:"sucursal"`
+	NumeroCaja  *int    `json:"numeroCaja"`
+}
+
+type Caja struct {
+	ID                *string  `json:"id"`
+	Monedas50centavos *float64 `json:"monedas50centavos"`
+	Monedas1Peso      *float64 `json:"monedas1Peso"`
+	Monedas2Pesos     *float64 `json:"monedas2Pesos"`
+	Monedas5Pesos     *float64 `json:"monedas5Pesos"`
+	Monedas10Pesos    *float64 `json:"monedas10Pesos"`
+	Monedas20Pesos    *float64 `json:"monedas20Pesos"`
+	Billetes20        *float64 `json:"billetes20"`
+	Billetes50        *float64 `json:"billetes50"`
+	Billetes100       *float64 `json:"billetes100"`
+	Billetes200       *float64 `json:"billetes200"`
+	Billetes500       *float64 `json:"billetes500"`
+	Billetes1000      *float64 `json:"billetes1000"`
+	NumeroCaja        int      `json:"numeroCaja"`
+}
+
+type ContadorCopia struct {
+	ID               *string `json:"id"`
+	Papel            *int    `json:"papel"`
+	CopiasBn         *int    `json:"copiasBN"`
+	CopiasColor      *int    `json:"copiasColor"`
+	ImpresionesBn    *int    `json:"impresionesBN"`
+	ImpresionesColor *int    `json:"impresionesColor"`
+	Sucursal         *string `json:"sucursal"`
+	NumeroCaja       *int    `json:"numeroCaja"`
+}
+
+type EliminarArticulo struct {
+	ID string `json:"id"`
+}
+
+type EliminarCajaByID struct {
+	ID         string `json:"id"`
+	NumeroCaja *int   `json:"numeroCaja"`
+}
+
+type EliminarContadorCopiaByID struct {
+	ID string `json:"id"`
+}
+
+type EliminarObservacionByID struct {
+	ID string `json:"id"`
+}
+
+type EliminarProducto struct {
+	ID string `json:"id"`
+}
+
+type EliminarResponsivaByID struct {
+	ID string `json:"id"`
+}
+
+type EliminarSucursal struct {
+	ID string `json:"id"`
+}
+
+type EliminarUsuario struct {
+	ID string `json:"id"`
+}
+
+type Observacion struct {
+	ID          *string  `json:"id"`
+	Descripcion *string  `json:"descripcion"`
+	Egreso      *float64 `json:"egreso"`
+	NumeroCaja  int      `json:"numeroCaja"`
+}
+
+type Producto struct {
+	ID          string   `json:"id"`
+	Nombre      string   `json:"nombre"`
+	Descripcion *string  `json:"descripcion"`
+	Precio      *float64 `json:"precio"`
+	Stock       *int     `json:"stock"`
+	Sucursal    *string  `json:"sucursal"`
+	NumeroCaja  *int     `json:"numeroCaja"`
+}
+
+type Responsiva struct {
+	ID                    string         `json:"id"`
+	NumeroCaja            int            `json:"numeroCaja"`
+	FechaEntrada          string         `json:"fechaEntrada"`
+	FechaSalida           *string        `json:"fechaSalida"`
+	VerificacionArticulos *bool          `json:"verificacionArticulos"`
+	ReporteFaltante       *bool          `json:"reporteFaltante"`
+	UsuarioEncargado      *Usuario       `json:"usuarioEncargado"`
+	UsuarioReceptor       *Usuario       `json:"usuarioReceptor"`
+	Productos             []*Producto    `json:"productos"`
+	ProductosVendidos     []*Producto    `json:"productosVendidos"`
+	ArticulosActuales     []*Articulo    `json:"articulosActuales"`
+	ArticulosEntregados   []*Articulo    `json:"articulosEntregados"`
+	CopiasActuales        *ContadorCopia `json:"copiasActuales"`
+	CopiasEntregadas      *ContadorCopia `json:"copiasEntregadas"`
+	Observaciones         []*Observacion `json:"observaciones"`
+	Caja                  *Caja          `json:"caja"`
+	Sucursal              string         `json:"sucursal"`
+}
+
+type Sucursal struct {
+	ID            string         `json:"id"`
+	Nombre        string         `json:"nombre"`
+	Direccion     *string        `json:"direccion"`
+	Productos     []*Producto    `json:"productos"`
+	Usuarios      []*Usuario     `json:"usuarios"`
+	Responsivas   []*Responsiva  `json:"responsivas"`
+	Articulos     []*Articulo    `json:"articulos"`
+	ContadorCopia *ContadorCopia `json:"contadorCopia"`
+}
+
+type Usuario struct {
+	ID       string  `json:"id"`
+	Nombre   *string `json:"nombre"`
+	Mail     *string `json:"mail"`
+	Nick     string  `json:"nick"`
+	Pass     string  `json:"pass"`
+	Admin    *bool   `json:"admin"`
+	Root     *bool   `json:"root"`
+	Sucursal *string `json:"sucursal"`
 }

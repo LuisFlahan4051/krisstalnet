@@ -5,6 +5,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/LuisFlahan4051/krisstalnet/API/database"
@@ -15,7 +16,7 @@ import (
 
 var db = database.Connect()
 
-func (r *mutationResolver) CrearUsuario(ctx context.Context, input model.ModificarUsuario) (*model.Usuario, error) {
+func (r *mutationResolver) CrearUsuario(ctx context.Context, input model.AgregarUsuario) (*model.Usuario, error) {
 	collection := db.Client.Database("krisstalnet-db").Collection("Usuarios")
 	nuevoUsuario := &model.Usuario{
 		ID:     input.ID,
@@ -33,7 +34,7 @@ func (r *mutationResolver) CrearUsuario(ctx context.Context, input model.Modific
 	return nuevoUsuario, err
 }
 
-func (r *mutationResolver) EliminarUsuarioByID(ctx context.Context, input *model.ModificarUsuario) (*model.Usuario, error) {
+func (r *mutationResolver) EliminarUsuarioByID(ctx context.Context, input model.EliminarUsuario) (*model.Usuario, error) {
 	collection := db.Client.Database("krisstalnet-db").Collection("Usuarios")
 
 	filter := &model.Usuario{
@@ -53,7 +54,7 @@ func (r *mutationResolver) EliminarUsuarioByID(ctx context.Context, input *model
 	return filter, err
 }
 
-func (r *mutationResolver) ActualizarUsuario(ctx context.Context, input *model.ModificarUsuario) (*model.Usuario, error) {
+func (r *mutationResolver) ActualizarUsuario(ctx context.Context, input *model.ActualizarUsuario) (*model.Usuario, error) {
 	collection := db.Client.Database("krisstalnet-db").Collection("Usuarios")
 
 	bsonFilter := bson.M{
@@ -86,6 +87,90 @@ func (r *mutationResolver) ActualizarUsuario(ctx context.Context, input *model.M
 	return update, nil
 }
 
+func (r *mutationResolver) AgregarProducto(ctx context.Context, input model.AgregarProducto) (*model.Producto, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarProductoByID(ctx context.Context, input model.EliminarProducto) (*model.Producto, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarProducto(ctx context.Context, input *model.ActualizarProducto) (*model.Producto, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) AgregarArticulo(ctx context.Context, input model.AgregarArticulo) (*model.Articulo, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarArticuloByID(ctx context.Context, input model.EliminarArticulo) (*model.Articulo, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarArticulo(ctx context.Context, input *model.ActualizarArticulo) (*model.Articulo, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) AgregarCaja(ctx context.Context, input *model.AgregarCaja) (*model.Caja, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarCajaByID(ctx context.Context, input *model.EliminarCajaByID) (*model.Caja, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarCaja(ctx context.Context, input *model.ActualizarCaja) (*model.Caja, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) AgregarContadorCopia(ctx context.Context, input *model.AgregarContadorCopia) (*model.ContadorCopia, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarContadorCopiaByID(ctx context.Context, input *model.EliminarContadorCopiaByID) (*model.ContadorCopia, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarContadorCopia(ctx context.Context, input *model.ActualizarContadorCopia) (*model.ContadorCopia, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) AgregarObservacion(ctx context.Context, input *model.AgregarObservacion) (*model.Observacion, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarObservacionByID(ctx context.Context, input *model.EliminarObservacionByID) (*model.Observacion, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarObservacion(ctx context.Context, input *model.ActualizarObservacion) (*model.Observacion, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) NuevaResponsiva(ctx context.Context, input model.AgregarResponsiva, productos []*model.AgregarProducto, productosVendidos []*model.AgregarProducto, articulosActuales []*model.AgregarArticulo, articulosEntregados []*model.AgregarArticulo, copiasActuales *model.AgregarContadorCopia, copiasEntregadas *model.AgregarContadorCopia, observaciones []*model.AgregarObservacion) (*model.Responsiva, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarResponsiva(ctx context.Context, input model.EliminarResponsivaByID) (*model.Responsiva, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarResponsiva(ctx context.Context, input model.AgregarResponsiva, productos []*model.AgregarProducto, productosVendidos []*model.AgregarProducto, articulosActuales []*model.AgregarArticulo, articulosEntregados []*model.AgregarArticulo, copiasActuales *model.AgregarContadorCopia, copiasEntregadas *model.AgregarContadorCopia, observaciones []*model.AgregarObservacion) (*model.Responsiva, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) AgregarSucursal(ctx context.Context, input model.AgregarSucursal, productos []*model.AgregarProducto, articulos []*model.AgregarArticulo, usuarios []*model.AgregarUsuario, responsivas []*model.AgregarResponsiva, contadorCopia *model.AgregarContadorCopia) (*model.Sucursal, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) EliminarSucursalByID(ctx context.Context, input model.EliminarSucursal) (*model.Sucursal, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ActualizarSucursal(ctx context.Context, input model.AgregarSucursal, productos []*model.AgregarProducto, articulos []*model.AgregarArticulo, usuarios []*model.AgregarUsuario, responsivas []*model.AgregarResponsiva, contadorCopia *model.AgregarContadorCopia) (*model.Sucursal, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) Usuarios(ctx context.Context, id *string) ([]*model.Usuario, error) {
 	collection := db.Client.Database("krisstalnet-db").Collection("Usuarios")
 	iterador, err := collection.Find(context.TODO(), bson.D{})
@@ -104,6 +189,30 @@ func (r *queryResolver) Usuarios(ctx context.Context, id *string) ([]*model.Usua
 	}
 
 	return usuarios, err
+}
+
+func (r *queryResolver) Productos(ctx context.Context, sucursal *string) ([]*model.Producto, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Sucursales(ctx context.Context) ([]*model.Sucursal, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Articulos(ctx context.Context, sucursal *string, numeroCaja *int) ([]*model.Articulo, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Responsivas(ctx context.Context, sucursal *string, numeroCaja *int) ([]*model.Responsiva, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Copias(ctx context.Context, sucursal *string, numeroCaja *int) ([]*model.ContadorCopia, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Observaciones(ctx context.Context, sucursal *string, numeroCaja *string) ([]*model.Observacion, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.

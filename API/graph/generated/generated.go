@@ -8,7 +8,6 @@ import (
 	"errors"
 	"strconv"
 	"sync"
-	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -43,6 +42,16 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Articulo struct {
+		Descripcion func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Nombre      func(childComplexity int) int
+		NumeroCaja  func(childComplexity int) int
+		Stok        func(childComplexity int) int
+		Sucursal    func(childComplexity int) int
+		Tipo        func(childComplexity int) int
+	}
+
 	Caja struct {
 		Billetes100       func(childComplexity int) int
 		Billetes1000      func(childComplexity int) int
@@ -50,75 +59,158 @@ type ComplexityRoot struct {
 		Billetes200       func(childComplexity int) int
 		Billetes50        func(childComplexity int) int
 		Billetes500       func(childComplexity int) int
+		ID                func(childComplexity int) int
 		Monedas10Pesos    func(childComplexity int) int
 		Monedas1Peso      func(childComplexity int) int
 		Monedas20Pesos    func(childComplexity int) int
 		Monedas2Pesos     func(childComplexity int) int
 		Monedas50centavos func(childComplexity int) int
 		Monedas5Pesos     func(childComplexity int) int
+		NumeroCaja        func(childComplexity int) int
+	}
+
+	ContadorCopia struct {
+		CopiasBn         func(childComplexity int) int
+		CopiasColor      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		ImpresionesBn    func(childComplexity int) int
+		ImpresionesColor func(childComplexity int) int
+		NumeroCaja       func(childComplexity int) int
+		Papel            func(childComplexity int) int
+		Sucursal         func(childComplexity int) int
 	}
 
 	Mutation struct {
-		ActualizarUsuario   func(childComplexity int, input *model.ModificarUsuario) int
-		CrearUsuario        func(childComplexity int, input model.ModificarUsuario) int
-		EliminarUsuarioByID func(childComplexity int, input *model.ModificarUsuario) int
+		ActualizarArticulo        func(childComplexity int, input *model.ActualizarArticulo) int
+		ActualizarCaja            func(childComplexity int, input *model.ActualizarCaja) int
+		ActualizarContadorCopia   func(childComplexity int, input *model.ActualizarContadorCopia) int
+		ActualizarObservacion     func(childComplexity int, input *model.ActualizarObservacion) int
+		ActualizarProducto        func(childComplexity int, input *model.ActualizarProducto) int
+		ActualizarResponsiva      func(childComplexity int, input model.AgregarResponsiva, productos []*model.AgregarProducto, productosVendidos []*model.AgregarProducto, articulosActuales []*model.AgregarArticulo, articulosEntregados []*model.AgregarArticulo, copiasActuales *model.AgregarContadorCopia, copiasEntregadas *model.AgregarContadorCopia, observaciones []*model.AgregarObservacion) int
+		ActualizarSucursal        func(childComplexity int, input model.AgregarSucursal, productos []*model.AgregarProducto, articulos []*model.AgregarArticulo, usuarios []*model.AgregarUsuario, responsivas []*model.AgregarResponsiva, contadorCopia *model.AgregarContadorCopia) int
+		ActualizarUsuario         func(childComplexity int, input *model.ActualizarUsuario) int
+		AgregarArticulo           func(childComplexity int, input model.AgregarArticulo) int
+		AgregarCaja               func(childComplexity int, input *model.AgregarCaja) int
+		AgregarContadorCopia      func(childComplexity int, input *model.AgregarContadorCopia) int
+		AgregarObservacion        func(childComplexity int, input *model.AgregarObservacion) int
+		AgregarProducto           func(childComplexity int, input model.AgregarProducto) int
+		AgregarSucursal           func(childComplexity int, input model.AgregarSucursal, productos []*model.AgregarProducto, articulos []*model.AgregarArticulo, usuarios []*model.AgregarUsuario, responsivas []*model.AgregarResponsiva, contadorCopia *model.AgregarContadorCopia) int
+		CrearUsuario              func(childComplexity int, input model.AgregarUsuario) int
+		EliminarArticuloByID      func(childComplexity int, input model.EliminarArticulo) int
+		EliminarCajaByID          func(childComplexity int, input *model.EliminarCajaByID) int
+		EliminarContadorCopiaByID func(childComplexity int, input *model.EliminarContadorCopiaByID) int
+		EliminarObservacionByID   func(childComplexity int, input *model.EliminarObservacionByID) int
+		EliminarProductoByID      func(childComplexity int, input model.EliminarProducto) int
+		EliminarResponsiva        func(childComplexity int, input model.EliminarResponsivaByID) int
+		EliminarSucursalByID      func(childComplexity int, input model.EliminarSucursal) int
+		EliminarUsuarioByID       func(childComplexity int, input model.EliminarUsuario) int
+		NuevaResponsiva           func(childComplexity int, input model.AgregarResponsiva, productos []*model.AgregarProducto, productosVendidos []*model.AgregarProducto, articulosActuales []*model.AgregarArticulo, articulosEntregados []*model.AgregarArticulo, copiasActuales *model.AgregarContadorCopia, copiasEntregadas *model.AgregarContadorCopia, observaciones []*model.AgregarObservacion) int
 	}
 
 	Observacion struct {
 		Descripcion func(childComplexity int) int
 		Egreso      func(childComplexity int) int
+		ID          func(childComplexity int) int
+		NumeroCaja  func(childComplexity int) int
 	}
 
 	Producto struct {
 		Descripcion func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Nombre      func(childComplexity int) int
+		NumeroCaja  func(childComplexity int) int
 		Precio      func(childComplexity int) int
+		Stock       func(childComplexity int) int
+		Sucursal    func(childComplexity int) int
 	}
 
 	Query struct {
-		Usuarios func(childComplexity int, id *string) int
+		Articulos     func(childComplexity int, sucursal *string, numeroCaja *int) int
+		Copias        func(childComplexity int, sucursal *string, numeroCaja *int) int
+		Observaciones func(childComplexity int, sucursal *string, numeroCaja *string) int
+		Productos     func(childComplexity int, sucursal *string) int
+		Responsivas   func(childComplexity int, sucursal *string, numeroCaja *int) int
+		Sucursales    func(childComplexity int) int
+		Usuarios      func(childComplexity int, id *string) int
 	}
 
 	Responsiva struct {
-		Caja              func(childComplexity int) int
-		FechaEntrada      func(childComplexity int) int
-		FechaSalida       func(childComplexity int) int
-		NumeroCaja        func(childComplexity int) int
-		Observaciones     func(childComplexity int) int
-		Productos         func(childComplexity int) int
-		ProductosVendidos func(childComplexity int) int
-		UsuarioEncargado  func(childComplexity int) int
-		UsuarioReceptor   func(childComplexity int) int
+		ArticulosActuales     func(childComplexity int) int
+		ArticulosEntregados   func(childComplexity int) int
+		Caja                  func(childComplexity int) int
+		CopiasActuales        func(childComplexity int) int
+		CopiasEntregadas      func(childComplexity int) int
+		FechaEntrada          func(childComplexity int) int
+		FechaSalida           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		NumeroCaja            func(childComplexity int) int
+		Observaciones         func(childComplexity int) int
+		Productos             func(childComplexity int) int
+		ProductosVendidos     func(childComplexity int) int
+		ReporteFaltante       func(childComplexity int) int
+		Sucursal              func(childComplexity int) int
+		UsuarioEncargado      func(childComplexity int) int
+		UsuarioReceptor       func(childComplexity int) int
+		VerificacionArticulos func(childComplexity int) int
 	}
 
 	Sucursal struct {
-		Direccion   func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Nombre      func(childComplexity int) int
-		Productos   func(childComplexity int) int
-		Responsivas func(childComplexity int) int
-		Usuarios    func(childComplexity int) int
+		Articulos     func(childComplexity int) int
+		ContadorCopia func(childComplexity int) int
+		Direccion     func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Nombre        func(childComplexity int) int
+		Productos     func(childComplexity int) int
+		Responsivas   func(childComplexity int) int
+		Usuarios      func(childComplexity int) int
 	}
 
 	Usuario struct {
-		Admin  func(childComplexity int) int
-		ID     func(childComplexity int) int
-		Mail   func(childComplexity int) int
-		Nick   func(childComplexity int) int
-		Nombre func(childComplexity int) int
-		Pass   func(childComplexity int) int
-		Root   func(childComplexity int) int
+		Admin    func(childComplexity int) int
+		ID       func(childComplexity int) int
+		Mail     func(childComplexity int) int
+		Nick     func(childComplexity int) int
+		Nombre   func(childComplexity int) int
+		Pass     func(childComplexity int) int
+		Root     func(childComplexity int) int
+		Sucursal func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	CrearUsuario(ctx context.Context, input model.ModificarUsuario) (*model.Usuario, error)
-	EliminarUsuarioByID(ctx context.Context, input *model.ModificarUsuario) (*model.Usuario, error)
-	ActualizarUsuario(ctx context.Context, input *model.ModificarUsuario) (*model.Usuario, error)
+	CrearUsuario(ctx context.Context, input model.AgregarUsuario) (*model.Usuario, error)
+	EliminarUsuarioByID(ctx context.Context, input model.EliminarUsuario) (*model.Usuario, error)
+	ActualizarUsuario(ctx context.Context, input *model.ActualizarUsuario) (*model.Usuario, error)
+	AgregarProducto(ctx context.Context, input model.AgregarProducto) (*model.Producto, error)
+	EliminarProductoByID(ctx context.Context, input model.EliminarProducto) (*model.Producto, error)
+	ActualizarProducto(ctx context.Context, input *model.ActualizarProducto) (*model.Producto, error)
+	AgregarArticulo(ctx context.Context, input model.AgregarArticulo) (*model.Articulo, error)
+	EliminarArticuloByID(ctx context.Context, input model.EliminarArticulo) (*model.Articulo, error)
+	ActualizarArticulo(ctx context.Context, input *model.ActualizarArticulo) (*model.Articulo, error)
+	AgregarCaja(ctx context.Context, input *model.AgregarCaja) (*model.Caja, error)
+	EliminarCajaByID(ctx context.Context, input *model.EliminarCajaByID) (*model.Caja, error)
+	ActualizarCaja(ctx context.Context, input *model.ActualizarCaja) (*model.Caja, error)
+	AgregarContadorCopia(ctx context.Context, input *model.AgregarContadorCopia) (*model.ContadorCopia, error)
+	EliminarContadorCopiaByID(ctx context.Context, input *model.EliminarContadorCopiaByID) (*model.ContadorCopia, error)
+	ActualizarContadorCopia(ctx context.Context, input *model.ActualizarContadorCopia) (*model.ContadorCopia, error)
+	AgregarObservacion(ctx context.Context, input *model.AgregarObservacion) (*model.Observacion, error)
+	EliminarObservacionByID(ctx context.Context, input *model.EliminarObservacionByID) (*model.Observacion, error)
+	ActualizarObservacion(ctx context.Context, input *model.ActualizarObservacion) (*model.Observacion, error)
+	NuevaResponsiva(ctx context.Context, input model.AgregarResponsiva, productos []*model.AgregarProducto, productosVendidos []*model.AgregarProducto, articulosActuales []*model.AgregarArticulo, articulosEntregados []*model.AgregarArticulo, copiasActuales *model.AgregarContadorCopia, copiasEntregadas *model.AgregarContadorCopia, observaciones []*model.AgregarObservacion) (*model.Responsiva, error)
+	EliminarResponsiva(ctx context.Context, input model.EliminarResponsivaByID) (*model.Responsiva, error)
+	ActualizarResponsiva(ctx context.Context, input model.AgregarResponsiva, productos []*model.AgregarProducto, productosVendidos []*model.AgregarProducto, articulosActuales []*model.AgregarArticulo, articulosEntregados []*model.AgregarArticulo, copiasActuales *model.AgregarContadorCopia, copiasEntregadas *model.AgregarContadorCopia, observaciones []*model.AgregarObservacion) (*model.Responsiva, error)
+	AgregarSucursal(ctx context.Context, input model.AgregarSucursal, productos []*model.AgregarProducto, articulos []*model.AgregarArticulo, usuarios []*model.AgregarUsuario, responsivas []*model.AgregarResponsiva, contadorCopia *model.AgregarContadorCopia) (*model.Sucursal, error)
+	EliminarSucursalByID(ctx context.Context, input model.EliminarSucursal) (*model.Sucursal, error)
+	ActualizarSucursal(ctx context.Context, input model.AgregarSucursal, productos []*model.AgregarProducto, articulos []*model.AgregarArticulo, usuarios []*model.AgregarUsuario, responsivas []*model.AgregarResponsiva, contadorCopia *model.AgregarContadorCopia) (*model.Sucursal, error)
 }
 type QueryResolver interface {
 	Usuarios(ctx context.Context, id *string) ([]*model.Usuario, error)
+	Productos(ctx context.Context, sucursal *string) ([]*model.Producto, error)
+	Sucursales(ctx context.Context) ([]*model.Sucursal, error)
+	Articulos(ctx context.Context, sucursal *string, numeroCaja *int) ([]*model.Articulo, error)
+	Responsivas(ctx context.Context, sucursal *string, numeroCaja *int) ([]*model.Responsiva, error)
+	Copias(ctx context.Context, sucursal *string, numeroCaja *int) ([]*model.ContadorCopia, error)
+	Observaciones(ctx context.Context, sucursal *string, numeroCaja *string) ([]*model.Observacion, error)
 }
 
 type executableSchema struct {
@@ -135,6 +227,55 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Articulo.descripcion":
+		if e.complexity.Articulo.Descripcion == nil {
+			break
+		}
+
+		return e.complexity.Articulo.Descripcion(childComplexity), true
+
+	case "Articulo.id":
+		if e.complexity.Articulo.ID == nil {
+			break
+		}
+
+		return e.complexity.Articulo.ID(childComplexity), true
+
+	case "Articulo.nombre":
+		if e.complexity.Articulo.Nombre == nil {
+			break
+		}
+
+		return e.complexity.Articulo.Nombre(childComplexity), true
+
+	case "Articulo.numeroCaja":
+		if e.complexity.Articulo.NumeroCaja == nil {
+			break
+		}
+
+		return e.complexity.Articulo.NumeroCaja(childComplexity), true
+
+	case "Articulo.stok":
+		if e.complexity.Articulo.Stok == nil {
+			break
+		}
+
+		return e.complexity.Articulo.Stok(childComplexity), true
+
+	case "Articulo.sucursal":
+		if e.complexity.Articulo.Sucursal == nil {
+			break
+		}
+
+		return e.complexity.Articulo.Sucursal(childComplexity), true
+
+	case "Articulo.tipo":
+		if e.complexity.Articulo.Tipo == nil {
+			break
+		}
+
+		return e.complexity.Articulo.Tipo(childComplexity), true
 
 	case "Caja.billetes100":
 		if e.complexity.Caja.Billetes100 == nil {
@@ -178,6 +319,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Caja.Billetes500(childComplexity), true
 
+	case "Caja.id":
+		if e.complexity.Caja.ID == nil {
+			break
+		}
+
+		return e.complexity.Caja.ID(childComplexity), true
+
 	case "Caja.monedas10Pesos":
 		if e.complexity.Caja.Monedas10Pesos == nil {
 			break
@@ -220,6 +368,153 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Caja.Monedas5Pesos(childComplexity), true
 
+	case "Caja.numeroCaja":
+		if e.complexity.Caja.NumeroCaja == nil {
+			break
+		}
+
+		return e.complexity.Caja.NumeroCaja(childComplexity), true
+
+	case "ContadorCopia.copiasBN":
+		if e.complexity.ContadorCopia.CopiasBn == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.CopiasBn(childComplexity), true
+
+	case "ContadorCopia.copiasColor":
+		if e.complexity.ContadorCopia.CopiasColor == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.CopiasColor(childComplexity), true
+
+	case "ContadorCopia.id":
+		if e.complexity.ContadorCopia.ID == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.ID(childComplexity), true
+
+	case "ContadorCopia.impresionesBN":
+		if e.complexity.ContadorCopia.ImpresionesBn == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.ImpresionesBn(childComplexity), true
+
+	case "ContadorCopia.impresionesColor":
+		if e.complexity.ContadorCopia.ImpresionesColor == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.ImpresionesColor(childComplexity), true
+
+	case "ContadorCopia.numeroCaja":
+		if e.complexity.ContadorCopia.NumeroCaja == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.NumeroCaja(childComplexity), true
+
+	case "ContadorCopia.papel":
+		if e.complexity.ContadorCopia.Papel == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.Papel(childComplexity), true
+
+	case "ContadorCopia.sucursal":
+		if e.complexity.ContadorCopia.Sucursal == nil {
+			break
+		}
+
+		return e.complexity.ContadorCopia.Sucursal(childComplexity), true
+
+	case "Mutation.actualizarArticulo":
+		if e.complexity.Mutation.ActualizarArticulo == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_actualizarArticulo_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarArticulo(childComplexity, args["input"].(*model.ActualizarArticulo)), true
+
+	case "Mutation.ActualizarCaja":
+		if e.complexity.Mutation.ActualizarCaja == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_ActualizarCaja_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarCaja(childComplexity, args["input"].(*model.ActualizarCaja)), true
+
+	case "Mutation.actualizarContadorCopia":
+		if e.complexity.Mutation.ActualizarContadorCopia == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_actualizarContadorCopia_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarContadorCopia(childComplexity, args["input"].(*model.ActualizarContadorCopia)), true
+
+	case "Mutation.actualizarObservacion":
+		if e.complexity.Mutation.ActualizarObservacion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_actualizarObservacion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarObservacion(childComplexity, args["input"].(*model.ActualizarObservacion)), true
+
+	case "Mutation.actualizarProducto":
+		if e.complexity.Mutation.ActualizarProducto == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_actualizarProducto_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarProducto(childComplexity, args["input"].(*model.ActualizarProducto)), true
+
+	case "Mutation.actualizarResponsiva":
+		if e.complexity.Mutation.ActualizarResponsiva == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_actualizarResponsiva_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarResponsiva(childComplexity, args["input"].(model.AgregarResponsiva), args["productos"].([]*model.AgregarProducto), args["productosVendidos"].([]*model.AgregarProducto), args["articulosActuales"].([]*model.AgregarArticulo), args["articulosEntregados"].([]*model.AgregarArticulo), args["copiasActuales"].(*model.AgregarContadorCopia), args["copiasEntregadas"].(*model.AgregarContadorCopia), args["observaciones"].([]*model.AgregarObservacion)), true
+
+	case "Mutation.actualizarSucursal":
+		if e.complexity.Mutation.ActualizarSucursal == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_actualizarSucursal_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ActualizarSucursal(childComplexity, args["input"].(model.AgregarSucursal), args["productos"].([]*model.AgregarProducto), args["articulos"].([]*model.AgregarArticulo), args["usuarios"].([]*model.AgregarUsuario), args["responsivas"].([]*model.AgregarResponsiva), args["contadorCopia"].(*model.AgregarContadorCopia)), true
+
 	case "Mutation.actualizarUsuario":
 		if e.complexity.Mutation.ActualizarUsuario == nil {
 			break
@@ -230,7 +525,79 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ActualizarUsuario(childComplexity, args["input"].(*model.ModificarUsuario)), true
+		return e.complexity.Mutation.ActualizarUsuario(childComplexity, args["input"].(*model.ActualizarUsuario)), true
+
+	case "Mutation.agregarArticulo":
+		if e.complexity.Mutation.AgregarArticulo == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_agregarArticulo_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AgregarArticulo(childComplexity, args["input"].(model.AgregarArticulo)), true
+
+	case "Mutation.agregarCaja":
+		if e.complexity.Mutation.AgregarCaja == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_agregarCaja_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AgregarCaja(childComplexity, args["input"].(*model.AgregarCaja)), true
+
+	case "Mutation.agregarContadorCopia":
+		if e.complexity.Mutation.AgregarContadorCopia == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_agregarContadorCopia_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AgregarContadorCopia(childComplexity, args["input"].(*model.AgregarContadorCopia)), true
+
+	case "Mutation.agregarObservacion":
+		if e.complexity.Mutation.AgregarObservacion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_agregarObservacion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AgregarObservacion(childComplexity, args["input"].(*model.AgregarObservacion)), true
+
+	case "Mutation.agregarProducto":
+		if e.complexity.Mutation.AgregarProducto == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_agregarProducto_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AgregarProducto(childComplexity, args["input"].(model.AgregarProducto)), true
+
+	case "Mutation.agregarSucursal":
+		if e.complexity.Mutation.AgregarSucursal == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_agregarSucursal_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AgregarSucursal(childComplexity, args["input"].(model.AgregarSucursal), args["productos"].([]*model.AgregarProducto), args["articulos"].([]*model.AgregarArticulo), args["usuarios"].([]*model.AgregarUsuario), args["responsivas"].([]*model.AgregarResponsiva), args["contadorCopia"].(*model.AgregarContadorCopia)), true
 
 	case "Mutation.crearUsuario":
 		if e.complexity.Mutation.CrearUsuario == nil {
@@ -242,7 +609,91 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CrearUsuario(childComplexity, args["input"].(model.ModificarUsuario)), true
+		return e.complexity.Mutation.CrearUsuario(childComplexity, args["input"].(model.AgregarUsuario)), true
+
+	case "Mutation.eliminarArticuloById":
+		if e.complexity.Mutation.EliminarArticuloByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarArticuloById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarArticuloByID(childComplexity, args["input"].(model.EliminarArticulo)), true
+
+	case "Mutation.eliminarCajaById":
+		if e.complexity.Mutation.EliminarCajaByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarCajaById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarCajaByID(childComplexity, args["input"].(*model.EliminarCajaByID)), true
+
+	case "Mutation.eliminarContadorCopiaById":
+		if e.complexity.Mutation.EliminarContadorCopiaByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarContadorCopiaById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarContadorCopiaByID(childComplexity, args["input"].(*model.EliminarContadorCopiaByID)), true
+
+	case "Mutation.eliminarObservacionByID":
+		if e.complexity.Mutation.EliminarObservacionByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarObservacionByID_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarObservacionByID(childComplexity, args["input"].(*model.EliminarObservacionByID)), true
+
+	case "Mutation.eliminarProductoById":
+		if e.complexity.Mutation.EliminarProductoByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarProductoById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarProductoByID(childComplexity, args["input"].(model.EliminarProducto)), true
+
+	case "Mutation.eliminarResponsiva":
+		if e.complexity.Mutation.EliminarResponsiva == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarResponsiva_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarResponsiva(childComplexity, args["input"].(model.EliminarResponsivaByID)), true
+
+	case "Mutation.eliminarSucursalById":
+		if e.complexity.Mutation.EliminarSucursalByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_eliminarSucursalById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EliminarSucursalByID(childComplexity, args["input"].(model.EliminarSucursal)), true
 
 	case "Mutation.eliminarUsuarioById":
 		if e.complexity.Mutation.EliminarUsuarioByID == nil {
@@ -254,7 +705,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.EliminarUsuarioByID(childComplexity, args["input"].(*model.ModificarUsuario)), true
+		return e.complexity.Mutation.EliminarUsuarioByID(childComplexity, args["input"].(model.EliminarUsuario)), true
+
+	case "Mutation.nuevaResponsiva":
+		if e.complexity.Mutation.NuevaResponsiva == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_nuevaResponsiva_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.NuevaResponsiva(childComplexity, args["input"].(model.AgregarResponsiva), args["productos"].([]*model.AgregarProducto), args["productosVendidos"].([]*model.AgregarProducto), args["articulosActuales"].([]*model.AgregarArticulo), args["articulosEntregados"].([]*model.AgregarArticulo), args["copiasActuales"].(*model.AgregarContadorCopia), args["copiasEntregadas"].(*model.AgregarContadorCopia), args["observaciones"].([]*model.AgregarObservacion)), true
 
 	case "Observacion.descripcion":
 		if e.complexity.Observacion.Descripcion == nil {
@@ -269,6 +732,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Observacion.Egreso(childComplexity), true
+
+	case "Observacion.id":
+		if e.complexity.Observacion.ID == nil {
+			break
+		}
+
+		return e.complexity.Observacion.ID(childComplexity), true
+
+	case "Observacion.numeroCaja":
+		if e.complexity.Observacion.NumeroCaja == nil {
+			break
+		}
+
+		return e.complexity.Observacion.NumeroCaja(childComplexity), true
 
 	case "Producto.descripcion":
 		if e.complexity.Producto.Descripcion == nil {
@@ -291,12 +768,100 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Producto.Nombre(childComplexity), true
 
+	case "Producto.numeroCaja":
+		if e.complexity.Producto.NumeroCaja == nil {
+			break
+		}
+
+		return e.complexity.Producto.NumeroCaja(childComplexity), true
+
 	case "Producto.precio":
 		if e.complexity.Producto.Precio == nil {
 			break
 		}
 
 		return e.complexity.Producto.Precio(childComplexity), true
+
+	case "Producto.stock":
+		if e.complexity.Producto.Stock == nil {
+			break
+		}
+
+		return e.complexity.Producto.Stock(childComplexity), true
+
+	case "Producto.sucursal":
+		if e.complexity.Producto.Sucursal == nil {
+			break
+		}
+
+		return e.complexity.Producto.Sucursal(childComplexity), true
+
+	case "Query.articulos":
+		if e.complexity.Query.Articulos == nil {
+			break
+		}
+
+		args, err := ec.field_Query_articulos_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Articulos(childComplexity, args["sucursal"].(*string), args["numeroCaja"].(*int)), true
+
+	case "Query.copias":
+		if e.complexity.Query.Copias == nil {
+			break
+		}
+
+		args, err := ec.field_Query_copias_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Copias(childComplexity, args["sucursal"].(*string), args["numeroCaja"].(*int)), true
+
+	case "Query.observaciones":
+		if e.complexity.Query.Observaciones == nil {
+			break
+		}
+
+		args, err := ec.field_Query_observaciones_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Observaciones(childComplexity, args["sucursal"].(*string), args["numeroCaja"].(*string)), true
+
+	case "Query.productos":
+		if e.complexity.Query.Productos == nil {
+			break
+		}
+
+		args, err := ec.field_Query_productos_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Productos(childComplexity, args["sucursal"].(*string)), true
+
+	case "Query.responsivas":
+		if e.complexity.Query.Responsivas == nil {
+			break
+		}
+
+		args, err := ec.field_Query_responsivas_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Responsivas(childComplexity, args["sucursal"].(*string), args["numeroCaja"].(*int)), true
+
+	case "Query.sucursales":
+		if e.complexity.Query.Sucursales == nil {
+			break
+		}
+
+		return e.complexity.Query.Sucursales(childComplexity), true
 
 	case "Query.usuarios":
 		if e.complexity.Query.Usuarios == nil {
@@ -310,12 +875,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Usuarios(childComplexity, args["id"].(*string)), true
 
+	case "Responsiva.articulosActuales":
+		if e.complexity.Responsiva.ArticulosActuales == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.ArticulosActuales(childComplexity), true
+
+	case "Responsiva.articulosEntregados":
+		if e.complexity.Responsiva.ArticulosEntregados == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.ArticulosEntregados(childComplexity), true
+
 	case "Responsiva.caja":
 		if e.complexity.Responsiva.Caja == nil {
 			break
 		}
 
 		return e.complexity.Responsiva.Caja(childComplexity), true
+
+	case "Responsiva.copiasActuales":
+		if e.complexity.Responsiva.CopiasActuales == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.CopiasActuales(childComplexity), true
+
+	case "Responsiva.copiasEntregadas":
+		if e.complexity.Responsiva.CopiasEntregadas == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.CopiasEntregadas(childComplexity), true
 
 	case "Responsiva.fechaEntrada":
 		if e.complexity.Responsiva.FechaEntrada == nil {
@@ -330,6 +923,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Responsiva.FechaSalida(childComplexity), true
+
+	case "Responsiva.id":
+		if e.complexity.Responsiva.ID == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.ID(childComplexity), true
 
 	case "Responsiva.numeroCaja":
 		if e.complexity.Responsiva.NumeroCaja == nil {
@@ -359,6 +959,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Responsiva.ProductosVendidos(childComplexity), true
 
+	case "Responsiva.reporteFaltante":
+		if e.complexity.Responsiva.ReporteFaltante == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.ReporteFaltante(childComplexity), true
+
+	case "Responsiva.sucursal":
+		if e.complexity.Responsiva.Sucursal == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.Sucursal(childComplexity), true
+
 	case "Responsiva.usuarioEncargado":
 		if e.complexity.Responsiva.UsuarioEncargado == nil {
 			break
@@ -372,6 +986,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Responsiva.UsuarioReceptor(childComplexity), true
+
+	case "Responsiva.verificacionArticulos":
+		if e.complexity.Responsiva.VerificacionArticulos == nil {
+			break
+		}
+
+		return e.complexity.Responsiva.VerificacionArticulos(childComplexity), true
+
+	case "Sucursal.articulos":
+		if e.complexity.Sucursal.Articulos == nil {
+			break
+		}
+
+		return e.complexity.Sucursal.Articulos(childComplexity), true
+
+	case "Sucursal.contadorCopia":
+		if e.complexity.Sucursal.ContadorCopia == nil {
+			break
+		}
+
+		return e.complexity.Sucursal.ContadorCopia(childComplexity), true
 
 	case "Sucursal.direccion":
 		if e.complexity.Sucursal.Direccion == nil {
@@ -464,6 +1099,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Usuario.Root(childComplexity), true
 
+	case "Usuario.sucursal":
+		if e.complexity.Usuario.Sucursal == nil {
+			break
+		}
+
+		return e.complexity.Usuario.Sucursal(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -532,15 +1174,6 @@ var sources = []*ast.Source{
 #
 # https://gqlgen.com/getting-started/
 
-type Sucursal {
-  id: ID!
-  nombre: String
-  direccion: String
-  productos: [Producto]
-  usuarios: [Usuario]
-  responsivas: [Responsiva]
-}
-
 type Usuario {
   id: ID!
   nombre: String
@@ -549,21 +1182,28 @@ type Usuario {
   pass: String!
   admin: Boolean
   root: Boolean
+  sucursal: ID
 }
 
 type Producto {
   id: ID!
-  nombre: String
+  nombre: String!
   descripcion: String
   precio: Float
+  stock: Int
+  sucursal: ID
+  numeroCaja: Int
 }
 
 type Observacion{
+  id: ID
   descripcion: String
   egreso: Float
+  numeroCaja: Int!
 }
 
 type Caja {
+  id: ID
   monedas50centavos: Float
   monedas1Peso: Float
   monedas2Pesos: Float
@@ -576,25 +1216,120 @@ type Caja {
   billetes200: Float
   billetes500: Float
   billetes1000: Float
+  numeroCaja: Int!
+}
+
+type ContadorCopia {
+  id: ID
+  papel: Int
+  copiasBN: Int
+  copiasColor: Int
+  impresionesBN: Int
+  impresionesColor: Int
+  sucursal: ID
+  numeroCaja: Int
+}
+
+type Articulo {
+  id: ID!
+  nombre: String!
+  descripcion: String
+  stok: Int
+  tipo: String
+  sucursal: ID
+  numeroCaja: Int
 }
 
 type Responsiva{
+  id: ID!
   numeroCaja: Int!
-  fechaEntrada: String
+  fechaEntrada: String!
   fechaSalida: String
-  usuarioEncargado: Usuario
+  verificacionArticulos: Boolean
+  reporteFaltante: Boolean
+  usuarioEncargado: Usuario!
   usuarioReceptor: Usuario
   productos: [Producto]
   productosVendidos: [Producto]
+  articulosActuales: [Articulo]
+  articulosEntregados: [Articulo]
+  copiasActuales: ContadorCopia
+  copiasEntregadas: ContadorCopia
   observaciones: [Observacion]
   caja: Caja
+  sucursal: ID!
 }
 
-type Query {
-  usuarios(id: ID): [Usuario!]!
+type Sucursal {
+  id: ID!
+  nombre: String!
+  direccion: String
+  productos: [Producto]
+  usuarios: [Usuario]
+  responsivas: [Responsiva]
+  articulos: [Articulo]
+  contadorCopia: ContadorCopia
 }
 
-input ModificarUsuario {
+
+
+
+
+
+
+
+
+input AgregarSucursal {
+  id: ID!
+  nombre: String!
+  direccion: String
+}
+
+input EliminarSucursal{
+  id: ID!
+}
+
+input ActualizarSucursal{
+  id: ID!
+  nombre: String!
+  direccion: String
+}
+
+input AgregarResponsiva{
+  id: ID!
+  numeroCaja: Int!
+  fechaEntrada: String!
+  fechaSalida: String
+  verificacionArticulos: Boolean
+  reporteFaltante: Boolean
+  sucursal: ID!
+}
+
+input EliminarResponsivaById {
+  id: ID!
+}
+
+input ActualizarResponsiva {
+  id: ID!
+  numeroCaja: Int!
+  fechaEntrada: String
+  fechaSalida: String
+  verificacionArticulos: Boolean
+  reporteFaltante: Boolean
+  sucursal: ID
+}
+
+input ActualizarUsuario {
+  id: ID!
+  nombre: String
+  mail: String
+  nick: String
+  pass: String!
+  admin: Boolean
+  root: Boolean
+}
+
+input AgregarUsuario {
   id: ID!
   nombre: String
   mail: String
@@ -604,12 +1339,245 @@ input ModificarUsuario {
   root: Boolean
 }
 
-type Mutation {
-  crearUsuario(input: ModificarUsuario!): Usuario
-  eliminarUsuarioById(input: ModificarUsuario): Usuario
-  actualizarUsuario(input: ModificarUsuario): Usuario
+input EliminarUsuario{
+  id: ID!
 }
-`, BuiltIn: false},
+
+input AgregarProducto{
+  id: ID!
+  nombre: String!
+  descripcion: String
+  precio: Float
+  stock: Int
+  sucursal: ID
+  numeroCaja: Int
+}
+
+input EliminarProducto{
+  id: ID!
+}
+
+input ActualizarProducto{
+  id: ID!
+  nombre: String
+  descripcion: String
+  precio: Float
+  stock: Int
+  sucursal: ID
+  numeroCaja: Int
+}
+
+input AgregarArticulo {
+  id: ID!
+  nombre: String!
+  descripcion: String
+  stok: Int
+  tipo: String
+  sucursal: ID
+  numeroCaja: Int
+}
+
+input EliminarArticulo {
+  id: ID!
+}
+
+input ActualizarArticulo{
+  id: ID!
+  nombre: String
+  descripcion: String
+  stok: Int
+  tipo: String
+  sucursal: ID
+  numeroCaja: Int
+}
+
+input AgregarContadorCopia {
+  id: ID!
+  papel: Int
+  copiasBN: Int
+  copiasColor: Int
+  impresionesBN: Int
+  impresionesColor: Int
+  sucursal: ID
+  numeroCaja: Int
+}
+
+input EliminarContadorCopiaById {
+  id: ID!
+}
+
+input ActualizarContadorCopia {
+  id: ID!
+  papel: Int
+  copiasBN: Int
+  copiasColor: Int
+  impresionesBN: Int
+  impresionesColor: Int
+  sucursal: ID
+  numeroCaja: Int
+}
+
+input AgregarObservacion {
+  id: ID!
+  descripcion: String
+  egreso: Float
+  numeroCaja: Int!
+}
+
+input EliminarObservacionByID {
+  id: ID!
+}
+
+input ActualizarObservacion {
+  id: ID!
+  descripcion: String
+  egreso: Float
+  numeroCaja: Int!
+}
+
+input AgregarCaja {
+  id: ID!
+  monedas50centavos: Float
+  monedas1Peso: Float
+  monedas2Pesos: Float
+  monedas5Pesos: Float
+  monedas10Pesos: Float
+  monedas20Pesos: Float
+  billetes20: Float
+  billetes50: Float
+  billetes100: Float
+  billetes200: Float
+  billetes500: Float
+  billetes1000: Float
+  numeroCaja: Int!
+}
+
+input EliminarCajaById{
+  id: ID!
+  numeroCaja: Int
+}
+
+input ActualizarCaja{
+  id: ID!
+  monedas50centavos: Float
+  monedas1Peso: Float
+  monedas2Pesos: Float
+  monedas5Pesos: Float
+  monedas10Pesos: Float
+  monedas20Pesos: Float
+  billetes20: Float
+  billetes50: Float
+  billetes100: Float
+  billetes200: Float
+  billetes500: Float
+  billetes1000: Float
+  numeroCaja: Int!
+}
+
+
+
+
+
+
+
+
+
+
+
+type Query {
+  usuarios(
+    id: ID
+  ): [Usuario]
+  productos(
+    sucursal: ID 
+  ): [Producto]
+  sucursales: [Sucursal]
+  articulos(
+    sucursal: ID,
+    numeroCaja: Int
+  ): [Articulo]
+  responsivas(
+    sucursal: ID,
+    numeroCaja: Int  
+  ): [Responsiva]
+  copias(
+    sucursal: ID,
+    numeroCaja: Int 
+  ): [ContadorCopia]
+  observaciones(
+    sucursal: ID,
+    numeroCaja: ID,
+  ): [Observacion]
+}
+
+
+
+
+type Mutation {
+  crearUsuario(input: AgregarUsuario!): Usuario
+  eliminarUsuarioById(input: EliminarUsuario!): Usuario
+  actualizarUsuario(input: ActualizarUsuario): Usuario
+
+  agregarProducto(input: AgregarProducto!): Producto
+  eliminarProductoById(input: EliminarProducto!): Producto
+  actualizarProducto(input: ActualizarProducto): Producto
+
+  agregarArticulo(input: AgregarArticulo!): Articulo
+  eliminarArticuloById(input: EliminarArticulo!): Articulo
+  actualizarArticulo(input: ActualizarArticulo): Articulo
+
+  agregarCaja(input: AgregarCaja): Caja
+  eliminarCajaById(input: EliminarCajaById): Caja
+  ActualizarCaja(input: ActualizarCaja): Caja
+
+  agregarContadorCopia(input: AgregarContadorCopia): ContadorCopia
+  eliminarContadorCopiaById(input: EliminarContadorCopiaById): ContadorCopia
+  actualizarContadorCopia(input: ActualizarContadorCopia): ContadorCopia
+  
+  agregarObservacion(input: AgregarObservacion): Observacion
+  eliminarObservacionByID(input: EliminarObservacionByID): Observacion
+  actualizarObservacion(input: ActualizarObservacion): Observacion
+
+  nuevaResponsiva(
+    input: AgregarResponsiva!,
+    productos: [AgregarProducto],
+    productosVendidos: [AgregarProducto],
+    articulosActuales: [AgregarArticulo],
+    articulosEntregados: [AgregarArticulo],
+    copiasActuales: AgregarContadorCopia,
+    copiasEntregadas: AgregarContadorCopia,
+    observaciones: [AgregarObservacion]
+  ): Responsiva
+  eliminarResponsiva(input: EliminarResponsivaById!): Responsiva
+  actualizarResponsiva(
+    input: AgregarResponsiva!,
+    productos: [AgregarProducto],
+    productosVendidos: [AgregarProducto],
+    articulosActuales: [AgregarArticulo],
+    articulosEntregados: [AgregarArticulo],
+    copiasActuales: AgregarContadorCopia,
+    copiasEntregadas: AgregarContadorCopia,
+    observaciones: [AgregarObservacion]
+  ): Responsiva
+
+  agregarSucursal(
+    input: AgregarSucursal!,
+    productos: [AgregarProducto],
+    articulos: [AgregarArticulo],
+    usuarios: [AgregarUsuario],
+    responsivas: [AgregarResponsiva],
+    contadorCopia: AgregarContadorCopia
+  ): Sucursal
+  eliminarSucursalById(input: EliminarSucursal!): Sucursal
+  actualizarSucursal(
+    input: AgregarSucursal!,
+    productos: [AgregarProducto],
+    articulos: [AgregarArticulo],
+    usuarios: [AgregarUsuario],
+    responsivas: [AgregarResponsiva],
+    contadorCopia: AgregarContadorCopia
+  ): Sucursal
+}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -617,12 +1585,12 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_actualizarUsuario_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_ActualizarCaja_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.ModificarUsuario
+	var arg0 *model.ActualizarCaja
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalOModificarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx, tmp)
+		arg0, err = ec.unmarshalOActualizarCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarCaja(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -631,12 +1599,428 @@ func (ec *executionContext) field_Mutation_actualizarUsuario_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_actualizarArticulo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ActualizarArticulo
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOActualizarArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_actualizarContadorCopia_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ActualizarContadorCopia
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOActualizarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_actualizarObservacion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ActualizarObservacion
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOActualizarObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarObservacion(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_actualizarProducto_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ActualizarProducto
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOActualizarProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_actualizarResponsiva_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AgregarResponsiva
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNAgregarResponsiva2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	var arg1 []*model.AgregarProducto
+	if tmp, ok := rawArgs["productos"]; ok {
+		arg1, err = ec.unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productos"] = arg1
+	var arg2 []*model.AgregarProducto
+	if tmp, ok := rawArgs["productosVendidos"]; ok {
+		arg2, err = ec.unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productosVendidos"] = arg2
+	var arg3 []*model.AgregarArticulo
+	if tmp, ok := rawArgs["articulosActuales"]; ok {
+		arg3, err = ec.unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["articulosActuales"] = arg3
+	var arg4 []*model.AgregarArticulo
+	if tmp, ok := rawArgs["articulosEntregados"]; ok {
+		arg4, err = ec.unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["articulosEntregados"] = arg4
+	var arg5 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["copiasActuales"]; ok {
+		arg5, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["copiasActuales"] = arg5
+	var arg6 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["copiasEntregadas"]; ok {
+		arg6, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["copiasEntregadas"] = arg6
+	var arg7 []*model.AgregarObservacion
+	if tmp, ok := rawArgs["observaciones"]; ok {
+		arg7, err = ec.unmarshalOAgregarObservacion2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["observaciones"] = arg7
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_actualizarSucursal_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AgregarSucursal
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNAgregarSucursal2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarSucursal(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	var arg1 []*model.AgregarProducto
+	if tmp, ok := rawArgs["productos"]; ok {
+		arg1, err = ec.unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productos"] = arg1
+	var arg2 []*model.AgregarArticulo
+	if tmp, ok := rawArgs["articulos"]; ok {
+		arg2, err = ec.unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["articulos"] = arg2
+	var arg3 []*model.AgregarUsuario
+	if tmp, ok := rawArgs["usuarios"]; ok {
+		arg3, err = ec.unmarshalOAgregarUsuario2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["usuarios"] = arg3
+	var arg4 []*model.AgregarResponsiva
+	if tmp, ok := rawArgs["responsivas"]; ok {
+		arg4, err = ec.unmarshalOAgregarResponsiva2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["responsivas"] = arg4
+	var arg5 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["contadorCopia"]; ok {
+		arg5, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["contadorCopia"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_actualizarUsuario_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.ActualizarUsuario
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOActualizarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarUsuario(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_agregarArticulo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AgregarArticulo
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNAgregarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_agregarCaja_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.AgregarCaja
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOAgregarCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarCaja(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_agregarContadorCopia_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_agregarObservacion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.AgregarObservacion
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOAgregarObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_agregarProducto_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AgregarProducto
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNAgregarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_agregarSucursal_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AgregarSucursal
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNAgregarSucursal2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarSucursal(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	var arg1 []*model.AgregarProducto
+	if tmp, ok := rawArgs["productos"]; ok {
+		arg1, err = ec.unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productos"] = arg1
+	var arg2 []*model.AgregarArticulo
+	if tmp, ok := rawArgs["articulos"]; ok {
+		arg2, err = ec.unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["articulos"] = arg2
+	var arg3 []*model.AgregarUsuario
+	if tmp, ok := rawArgs["usuarios"]; ok {
+		arg3, err = ec.unmarshalOAgregarUsuario2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["usuarios"] = arg3
+	var arg4 []*model.AgregarResponsiva
+	if tmp, ok := rawArgs["responsivas"]; ok {
+		arg4, err = ec.unmarshalOAgregarResponsiva2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["responsivas"] = arg4
+	var arg5 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["contadorCopia"]; ok {
+		arg5, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["contadorCopia"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_crearUsuario_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.ModificarUsuario
+	var arg0 model.AgregarUsuario
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNModificarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx, tmp)
+		arg0, err = ec.unmarshalNAgregarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarArticuloById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.EliminarArticulo
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNEliminarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarCajaById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.EliminarCajaByID
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOEliminarCajaById2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarCajaByID(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarContadorCopiaById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.EliminarContadorCopiaByID
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOEliminarContadorCopiaById2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarContadorCopiaByID(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarObservacionByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.EliminarObservacionByID
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOEliminarObservacionByID2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarObservacionByID(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarProductoById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.EliminarProducto
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNEliminarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarResponsiva_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.EliminarResponsivaByID
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNEliminarResponsivaById2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarResponsivaByID(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_eliminarSucursalById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.EliminarSucursal
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNEliminarSucursal2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarSucursal(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -648,14 +2032,84 @@ func (ec *executionContext) field_Mutation_crearUsuario_args(ctx context.Context
 func (ec *executionContext) field_Mutation_eliminarUsuarioById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.ModificarUsuario
+	var arg0 model.EliminarUsuario
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalOModificarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx, tmp)
+		arg0, err = ec.unmarshalNEliminarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarUsuario(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_nuevaResponsiva_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.AgregarResponsiva
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNAgregarResponsiva2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	var arg1 []*model.AgregarProducto
+	if tmp, ok := rawArgs["productos"]; ok {
+		arg1, err = ec.unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productos"] = arg1
+	var arg2 []*model.AgregarProducto
+	if tmp, ok := rawArgs["productosVendidos"]; ok {
+		arg2, err = ec.unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productosVendidos"] = arg2
+	var arg3 []*model.AgregarArticulo
+	if tmp, ok := rawArgs["articulosActuales"]; ok {
+		arg3, err = ec.unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["articulosActuales"] = arg3
+	var arg4 []*model.AgregarArticulo
+	if tmp, ok := rawArgs["articulosEntregados"]; ok {
+		arg4, err = ec.unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["articulosEntregados"] = arg4
+	var arg5 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["copiasActuales"]; ok {
+		arg5, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["copiasActuales"] = arg5
+	var arg6 *model.AgregarContadorCopia
+	if tmp, ok := rawArgs["copiasEntregadas"]; ok {
+		arg6, err = ec.unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["copiasEntregadas"] = arg6
+	var arg7 []*model.AgregarObservacion
+	if tmp, ok := rawArgs["observaciones"]; ok {
+		arg7, err = ec.unmarshalOAgregarObservacion2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["observaciones"] = arg7
 	return args, nil
 }
 
@@ -670,6 +2124,108 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_articulos_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["sucursal"]; ok {
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sucursal"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["numeroCaja"]; ok {
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["numeroCaja"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_copias_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["sucursal"]; ok {
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sucursal"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["numeroCaja"]; ok {
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["numeroCaja"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_observaciones_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["sucursal"]; ok {
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sucursal"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["numeroCaja"]; ok {
+		arg1, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["numeroCaja"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_productos_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["sucursal"]; ok {
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sucursal"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_responsivas_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["sucursal"]; ok {
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sucursal"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["numeroCaja"]; ok {
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["numeroCaja"] = arg1
 	return args, nil
 }
 
@@ -722,6 +2278,260 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _Articulo_id(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Articulo_nombre(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nombre, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Articulo_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descripcion, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Articulo_stok(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Stok, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Articulo_tipo(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tipo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Articulo_sucursal(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sucursal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Articulo_numeroCaja(ctx context.Context, field graphql.CollectedField, obj *model.Articulo) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Articulo",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumeroCaja, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Caja_id(ctx context.Context, field graphql.CollectedField, obj *model.Caja) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Caja",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
 
 func (ec *executionContext) _Caja_monedas50centavos(ctx context.Context, field graphql.CollectedField, obj *model.Caja) (ret graphql.Marshaler) {
 	defer func() {
@@ -1095,6 +2905,288 @@ func (ec *executionContext) _Caja_billetes1000(ctx context.Context, field graphq
 	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Caja_numeroCaja(ctx context.Context, field graphql.CollectedField, obj *model.Caja) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Caja",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumeroCaja, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_id(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_papel(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Papel, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_copiasBN(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CopiasBn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_copiasColor(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CopiasColor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_impresionesBN(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ImpresionesBn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_impresionesColor(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ImpresionesColor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_sucursal(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sucursal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ContadorCopia_numeroCaja(ctx context.Context, field graphql.CollectedField, obj *model.ContadorCopia) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ContadorCopia",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumeroCaja, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Mutation_crearUsuario(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1119,7 +3211,7 @@ func (ec *executionContext) _Mutation_crearUsuario(ctx context.Context, field gr
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CrearUsuario(rctx, args["input"].(model.ModificarUsuario))
+		return ec.resolvers.Mutation().CrearUsuario(rctx, args["input"].(model.AgregarUsuario))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1157,7 +3249,7 @@ func (ec *executionContext) _Mutation_eliminarUsuarioById(ctx context.Context, f
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().EliminarUsuarioByID(rctx, args["input"].(*model.ModificarUsuario))
+		return ec.resolvers.Mutation().EliminarUsuarioByID(rctx, args["input"].(model.EliminarUsuario))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1195,7 +3287,7 @@ func (ec *executionContext) _Mutation_actualizarUsuario(ctx context.Context, fie
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ActualizarUsuario(rctx, args["input"].(*model.ModificarUsuario))
+		return ec.resolvers.Mutation().ActualizarUsuario(rctx, args["input"].(*model.ActualizarUsuario))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1207,6 +3299,835 @@ func (ec *executionContext) _Mutation_actualizarUsuario(ctx context.Context, fie
 	res := resTmp.(*model.Usuario)
 	fc.Result = res
 	return ec.marshalOUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_agregarProducto(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_agregarProducto_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AgregarProducto(rctx, args["input"].(model.AgregarProducto))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Producto)
+	fc.Result = res
+	return ec.marshalOProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐProducto(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarProductoById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarProductoById_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarProductoByID(rctx, args["input"].(model.EliminarProducto))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Producto)
+	fc.Result = res
+	return ec.marshalOProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐProducto(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_actualizarProducto(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_actualizarProducto_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarProducto(rctx, args["input"].(*model.ActualizarProducto))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Producto)
+	fc.Result = res
+	return ec.marshalOProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐProducto(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_agregarArticulo(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_agregarArticulo_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AgregarArticulo(rctx, args["input"].(model.AgregarArticulo))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarArticuloById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarArticuloById_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarArticuloByID(rctx, args["input"].(model.EliminarArticulo))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_actualizarArticulo(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_actualizarArticulo_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarArticulo(rctx, args["input"].(*model.ActualizarArticulo))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_agregarCaja(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_agregarCaja_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AgregarCaja(rctx, args["input"].(*model.AgregarCaja))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Caja)
+	fc.Result = res
+	return ec.marshalOCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐCaja(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarCajaById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarCajaById_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarCajaByID(rctx, args["input"].(*model.EliminarCajaByID))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Caja)
+	fc.Result = res
+	return ec.marshalOCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐCaja(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_ActualizarCaja(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_ActualizarCaja_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarCaja(rctx, args["input"].(*model.ActualizarCaja))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Caja)
+	fc.Result = res
+	return ec.marshalOCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐCaja(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_agregarContadorCopia(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_agregarContadorCopia_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AgregarContadorCopia(rctx, args["input"].(*model.AgregarContadorCopia))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarContadorCopiaById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarContadorCopiaById_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarContadorCopiaByID(rctx, args["input"].(*model.EliminarContadorCopiaByID))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_actualizarContadorCopia(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_actualizarContadorCopia_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarContadorCopia(rctx, args["input"].(*model.ActualizarContadorCopia))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_agregarObservacion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_agregarObservacion_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AgregarObservacion(rctx, args["input"].(*model.AgregarObservacion))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Observacion)
+	fc.Result = res
+	return ec.marshalOObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐObservacion(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarObservacionByID(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarObservacionByID_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarObservacionByID(rctx, args["input"].(*model.EliminarObservacionByID))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Observacion)
+	fc.Result = res
+	return ec.marshalOObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐObservacion(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_actualizarObservacion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_actualizarObservacion_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarObservacion(rctx, args["input"].(*model.ActualizarObservacion))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Observacion)
+	fc.Result = res
+	return ec.marshalOObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐObservacion(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_nuevaResponsiva(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_nuevaResponsiva_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().NuevaResponsiva(rctx, args["input"].(model.AgregarResponsiva), args["productos"].([]*model.AgregarProducto), args["productosVendidos"].([]*model.AgregarProducto), args["articulosActuales"].([]*model.AgregarArticulo), args["articulosEntregados"].([]*model.AgregarArticulo), args["copiasActuales"].(*model.AgregarContadorCopia), args["copiasEntregadas"].(*model.AgregarContadorCopia), args["observaciones"].([]*model.AgregarObservacion))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Responsiva)
+	fc.Result = res
+	return ec.marshalOResponsiva2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐResponsiva(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarResponsiva(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarResponsiva_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarResponsiva(rctx, args["input"].(model.EliminarResponsivaByID))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Responsiva)
+	fc.Result = res
+	return ec.marshalOResponsiva2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐResponsiva(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_actualizarResponsiva(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_actualizarResponsiva_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarResponsiva(rctx, args["input"].(model.AgregarResponsiva), args["productos"].([]*model.AgregarProducto), args["productosVendidos"].([]*model.AgregarProducto), args["articulosActuales"].([]*model.AgregarArticulo), args["articulosEntregados"].([]*model.AgregarArticulo), args["copiasActuales"].(*model.AgregarContadorCopia), args["copiasEntregadas"].(*model.AgregarContadorCopia), args["observaciones"].([]*model.AgregarObservacion))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Responsiva)
+	fc.Result = res
+	return ec.marshalOResponsiva2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐResponsiva(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_agregarSucursal(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_agregarSucursal_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AgregarSucursal(rctx, args["input"].(model.AgregarSucursal), args["productos"].([]*model.AgregarProducto), args["articulos"].([]*model.AgregarArticulo), args["usuarios"].([]*model.AgregarUsuario), args["responsivas"].([]*model.AgregarResponsiva), args["contadorCopia"].(*model.AgregarContadorCopia))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Sucursal)
+	fc.Result = res
+	return ec.marshalOSucursal2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_eliminarSucursalById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_eliminarSucursalById_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EliminarSucursalByID(rctx, args["input"].(model.EliminarSucursal))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Sucursal)
+	fc.Result = res
+	return ec.marshalOSucursal2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_actualizarSucursal(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_actualizarSucursal_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ActualizarSucursal(rctx, args["input"].(model.AgregarSucursal), args["productos"].([]*model.AgregarProducto), args["articulos"].([]*model.AgregarArticulo), args["usuarios"].([]*model.AgregarUsuario), args["responsivas"].([]*model.AgregarResponsiva), args["contadorCopia"].(*model.AgregarContadorCopia))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Sucursal)
+	fc.Result = res
+	return ec.marshalOSucursal2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Observacion_id(ctx context.Context, field graphql.CollectedField, obj *model.Observacion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Observacion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Observacion_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.Observacion) (ret graphql.Marshaler) {
@@ -1271,6 +4192,40 @@ func (ec *executionContext) _Observacion_egreso(ctx context.Context, field graph
 	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Observacion_numeroCaja(ctx context.Context, field graphql.CollectedField, obj *model.Observacion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Observacion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumeroCaja, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Producto_id(ctx context.Context, field graphql.CollectedField, obj *model.Producto) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1329,11 +4284,14 @@ func (ec *executionContext) _Producto_nombre(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Producto_descripcion(ctx context.Context, field graphql.CollectedField, obj *model.Producto) (ret graphql.Marshaler) {
@@ -1398,6 +4356,99 @@ func (ec *executionContext) _Producto_precio(ctx context.Context, field graphql.
 	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Producto_stock(ctx context.Context, field graphql.CollectedField, obj *model.Producto) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Producto",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Stock, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Producto_sucursal(ctx context.Context, field graphql.CollectedField, obj *model.Producto) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Producto",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sucursal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Producto_numeroCaja(ctx context.Context, field graphql.CollectedField, obj *model.Producto) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Producto",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NumeroCaja, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_usuarios(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1429,14 +4480,232 @@ func (ec *executionContext) _Query_usuarios(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.([]*model.Usuario)
 	fc.Result = res
-	return ec.marshalNUsuario2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuarioᚄ(ctx, field.Selections, res)
+	return ec.marshalOUsuario2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_productos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_productos_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Productos(rctx, args["sucursal"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Producto)
+	fc.Result = res
+	return ec.marshalOProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐProducto(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_sucursales(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Sucursales(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Sucursal)
+	fc.Result = res
+	return ec.marshalOSucursal2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_articulos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_articulos_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Articulos(rctx, args["sucursal"].(*string), args["numeroCaja"].(*int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_responsivas(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_responsivas_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Responsivas(rctx, args["sucursal"].(*string), args["numeroCaja"].(*int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Responsiva)
+	fc.Result = res
+	return ec.marshalOResponsiva2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐResponsiva(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_copias(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_copias_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Copias(rctx, args["sucursal"].(*string), args["numeroCaja"].(*int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_observaciones(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_observaciones_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Observaciones(rctx, args["sucursal"].(*string), args["numeroCaja"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Observacion)
+	fc.Result = res
+	return ec.marshalOObservacion2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐObservacion(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1508,6 +4777,40 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Responsiva_id(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Responsiva_numeroCaja(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1566,11 +4869,14 @@ func (ec *executionContext) _Responsiva_fechaEntrada(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Responsiva_fechaSalida(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
@@ -1604,6 +4910,68 @@ func (ec *executionContext) _Responsiva_fechaSalida(ctx context.Context, field g
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Responsiva_verificacionArticulos(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.VerificacionArticulos, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Responsiva_reporteFaltante(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ReporteFaltante, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Responsiva_usuarioEncargado(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1628,11 +4996,14 @@ func (ec *executionContext) _Responsiva_usuarioEncargado(ctx context.Context, fi
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Usuario)
 	fc.Result = res
-	return ec.marshalOUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx, field.Selections, res)
+	return ec.marshalNUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Responsiva_usuarioReceptor(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
@@ -1728,6 +5099,130 @@ func (ec *executionContext) _Responsiva_productosVendidos(ctx context.Context, f
 	return ec.marshalOProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐProducto(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Responsiva_articulosActuales(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ArticulosActuales, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Responsiva_articulosEntregados(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ArticulosEntregados, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Responsiva_copiasActuales(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CopiasActuales, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Responsiva_copiasEntregadas(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CopiasEntregadas, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Responsiva_observaciones(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1790,6 +5285,40 @@ func (ec *executionContext) _Responsiva_caja(ctx context.Context, field graphql.
 	return ec.marshalOCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐCaja(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Responsiva_sucursal(ctx context.Context, field graphql.CollectedField, obj *model.Responsiva) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Responsiva",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sucursal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Sucursal_id(ctx context.Context, field graphql.CollectedField, obj *model.Sucursal) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1848,11 +5377,14 @@ func (ec *executionContext) _Sucursal_nombre(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Sucursal_direccion(ctx context.Context, field graphql.CollectedField, obj *model.Sucursal) (ret graphql.Marshaler) {
@@ -1977,6 +5509,68 @@ func (ec *executionContext) _Sucursal_responsivas(ctx context.Context, field gra
 	res := resTmp.([]*model.Responsiva)
 	fc.Result = res
 	return ec.marshalOResponsiva2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐResponsiva(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Sucursal_articulos(ctx context.Context, field graphql.CollectedField, obj *model.Sucursal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Sucursal",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Articulos, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Articulo)
+	fc.Result = res
+	return ec.marshalOArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Sucursal_contadorCopia(ctx context.Context, field graphql.CollectedField, obj *model.Sucursal) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Sucursal",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ContadorCopia, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ContadorCopia)
+	fc.Result = res
+	return ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Usuario_id(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
@@ -2203,6 +5797,37 @@ func (ec *executionContext) _Usuario_root(ctx context.Context, field graphql.Col
 	res := resTmp.(*bool)
 	fc.Result = res
 	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Usuario_sucursal(ctx context.Context, field graphql.CollectedField, obj *model.Usuario) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Usuario",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sucursal, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -3260,8 +6885,830 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputModificarUsuario(ctx context.Context, obj interface{}) (model.ModificarUsuario, error) {
-	var it model.ModificarUsuario
+func (ec *executionContext) unmarshalInputActualizarArticulo(ctx context.Context, obj interface{}) (model.ActualizarArticulo, error) {
+	var it model.ActualizarArticulo
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "stok":
+			var err error
+			it.Stok, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipo":
+			var err error
+			it.Tipo, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarCaja(ctx context.Context, obj interface{}) (model.ActualizarCaja, error) {
+	var it model.ActualizarCaja
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas50centavos":
+			var err error
+			it.Monedas50centavos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas1Peso":
+			var err error
+			it.Monedas1Peso, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas2Pesos":
+			var err error
+			it.Monedas2Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas5Pesos":
+			var err error
+			it.Monedas5Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas10Pesos":
+			var err error
+			it.Monedas10Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas20Pesos":
+			var err error
+			it.Monedas20Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes20":
+			var err error
+			it.Billetes20, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes50":
+			var err error
+			it.Billetes50, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes100":
+			var err error
+			it.Billetes100, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes200":
+			var err error
+			it.Billetes200, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes500":
+			var err error
+			it.Billetes500, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes1000":
+			var err error
+			it.Billetes1000, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarContadorCopia(ctx context.Context, obj interface{}) (model.ActualizarContadorCopia, error) {
+	var it model.ActualizarContadorCopia
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "papel":
+			var err error
+			it.Papel, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "copiasBN":
+			var err error
+			it.CopiasBn, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "copiasColor":
+			var err error
+			it.CopiasColor, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "impresionesBN":
+			var err error
+			it.ImpresionesBn, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "impresionesColor":
+			var err error
+			it.ImpresionesColor, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarObservacion(ctx context.Context, obj interface{}) (model.ActualizarObservacion, error) {
+	var it model.ActualizarObservacion
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "egreso":
+			var err error
+			it.Egreso, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarProducto(ctx context.Context, obj interface{}) (model.ActualizarProducto, error) {
+	var it model.ActualizarProducto
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "precio":
+			var err error
+			it.Precio, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "stock":
+			var err error
+			it.Stock, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarResponsiva(ctx context.Context, obj interface{}) (model.ActualizarResponsiva, error) {
+	var it model.ActualizarResponsiva
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "fechaEntrada":
+			var err error
+			it.FechaEntrada, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "fechaSalida":
+			var err error
+			it.FechaSalida, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "verificacionArticulos":
+			var err error
+			it.VerificacionArticulos, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "reporteFaltante":
+			var err error
+			it.ReporteFaltante, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarSucursal(ctx context.Context, obj interface{}) (model.ActualizarSucursal, error) {
+	var it model.ActualizarSucursal
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "direccion":
+			var err error
+			it.Direccion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputActualizarUsuario(ctx context.Context, obj interface{}) (model.ActualizarUsuario, error) {
+	var it model.ActualizarUsuario
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "mail":
+			var err error
+			it.Mail, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nick":
+			var err error
+			it.Nick, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "pass":
+			var err error
+			it.Pass, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "admin":
+			var err error
+			it.Admin, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "root":
+			var err error
+			it.Root, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarArticulo(ctx context.Context, obj interface{}) (model.AgregarArticulo, error) {
+	var it model.AgregarArticulo
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "stok":
+			var err error
+			it.Stok, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tipo":
+			var err error
+			it.Tipo, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarCaja(ctx context.Context, obj interface{}) (model.AgregarCaja, error) {
+	var it model.AgregarCaja
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas50centavos":
+			var err error
+			it.Monedas50centavos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas1Peso":
+			var err error
+			it.Monedas1Peso, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas2Pesos":
+			var err error
+			it.Monedas2Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas5Pesos":
+			var err error
+			it.Monedas5Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas10Pesos":
+			var err error
+			it.Monedas10Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "monedas20Pesos":
+			var err error
+			it.Monedas20Pesos, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes20":
+			var err error
+			it.Billetes20, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes50":
+			var err error
+			it.Billetes50, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes100":
+			var err error
+			it.Billetes100, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes200":
+			var err error
+			it.Billetes200, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes500":
+			var err error
+			it.Billetes500, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "billetes1000":
+			var err error
+			it.Billetes1000, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarContadorCopia(ctx context.Context, obj interface{}) (model.AgregarContadorCopia, error) {
+	var it model.AgregarContadorCopia
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "papel":
+			var err error
+			it.Papel, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "copiasBN":
+			var err error
+			it.CopiasBn, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "copiasColor":
+			var err error
+			it.CopiasColor, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "impresionesBN":
+			var err error
+			it.ImpresionesBn, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "impresionesColor":
+			var err error
+			it.ImpresionesColor, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarObservacion(ctx context.Context, obj interface{}) (model.AgregarObservacion, error) {
+	var it model.AgregarObservacion
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "egreso":
+			var err error
+			it.Egreso, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarProducto(ctx context.Context, obj interface{}) (model.AgregarProducto, error) {
+	var it model.AgregarProducto
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "descripcion":
+			var err error
+			it.Descripcion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "precio":
+			var err error
+			it.Precio, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "stock":
+			var err error
+			it.Stock, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarResponsiva(ctx context.Context, obj interface{}) (model.AgregarResponsiva, error) {
+	var it model.AgregarResponsiva
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "fechaEntrada":
+			var err error
+			it.FechaEntrada, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "fechaSalida":
+			var err error
+			it.FechaSalida, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "verificacionArticulos":
+			var err error
+			it.VerificacionArticulos, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "reporteFaltante":
+			var err error
+			it.ReporteFaltante, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sucursal":
+			var err error
+			it.Sucursal, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarSucursal(ctx context.Context, obj interface{}) (model.AgregarSucursal, error) {
+	var it model.AgregarSucursal
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nombre":
+			var err error
+			it.Nombre, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "direccion":
+			var err error
+			it.Direccion, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputAgregarUsuario(ctx context.Context, obj interface{}) (model.AgregarUsuario, error) {
+	var it model.AgregarUsuario
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -3314,6 +7761,156 @@ func (ec *executionContext) unmarshalInputModificarUsuario(ctx context.Context, 
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputEliminarArticulo(ctx context.Context, obj interface{}) (model.EliminarArticulo, error) {
+	var it model.EliminarArticulo
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarCajaById(ctx context.Context, obj interface{}) (model.EliminarCajaByID, error) {
+	var it model.EliminarCajaByID
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "numeroCaja":
+			var err error
+			it.NumeroCaja, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarContadorCopiaById(ctx context.Context, obj interface{}) (model.EliminarContadorCopiaByID, error) {
+	var it model.EliminarContadorCopiaByID
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarObservacionByID(ctx context.Context, obj interface{}) (model.EliminarObservacionByID, error) {
+	var it model.EliminarObservacionByID
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarProducto(ctx context.Context, obj interface{}) (model.EliminarProducto, error) {
+	var it model.EliminarProducto
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarResponsivaById(ctx context.Context, obj interface{}) (model.EliminarResponsivaByID, error) {
+	var it model.EliminarResponsivaByID
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarSucursal(ctx context.Context, obj interface{}) (model.EliminarSucursal, error) {
+	var it model.EliminarSucursal
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputEliminarUsuario(ctx context.Context, obj interface{}) (model.EliminarUsuario, error) {
+	var it model.EliminarUsuario
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -3321,6 +7918,48 @@ func (ec *executionContext) unmarshalInputModificarUsuario(ctx context.Context, 
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var articuloImplementors = []string{"Articulo"}
+
+func (ec *executionContext) _Articulo(ctx context.Context, sel ast.SelectionSet, obj *model.Articulo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, articuloImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Articulo")
+		case "id":
+			out.Values[i] = ec._Articulo_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "nombre":
+			out.Values[i] = ec._Articulo_nombre(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "descripcion":
+			out.Values[i] = ec._Articulo_descripcion(ctx, field, obj)
+		case "stok":
+			out.Values[i] = ec._Articulo_stok(ctx, field, obj)
+		case "tipo":
+			out.Values[i] = ec._Articulo_tipo(ctx, field, obj)
+		case "sucursal":
+			out.Values[i] = ec._Articulo_sucursal(ctx, field, obj)
+		case "numeroCaja":
+			out.Values[i] = ec._Articulo_numeroCaja(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
 
 var cajaImplementors = []string{"Caja"}
 
@@ -3333,6 +7972,8 @@ func (ec *executionContext) _Caja(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Caja")
+		case "id":
+			out.Values[i] = ec._Caja_id(ctx, field, obj)
 		case "monedas50centavos":
 			out.Values[i] = ec._Caja_monedas50centavos(ctx, field, obj)
 		case "monedas1Peso":
@@ -3357,6 +7998,49 @@ func (ec *executionContext) _Caja(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Caja_billetes500(ctx, field, obj)
 		case "billetes1000":
 			out.Values[i] = ec._Caja_billetes1000(ctx, field, obj)
+		case "numeroCaja":
+			out.Values[i] = ec._Caja_numeroCaja(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var contadorCopiaImplementors = []string{"ContadorCopia"}
+
+func (ec *executionContext) _ContadorCopia(ctx context.Context, sel ast.SelectionSet, obj *model.ContadorCopia) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, contadorCopiaImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ContadorCopia")
+		case "id":
+			out.Values[i] = ec._ContadorCopia_id(ctx, field, obj)
+		case "papel":
+			out.Values[i] = ec._ContadorCopia_papel(ctx, field, obj)
+		case "copiasBN":
+			out.Values[i] = ec._ContadorCopia_copiasBN(ctx, field, obj)
+		case "copiasColor":
+			out.Values[i] = ec._ContadorCopia_copiasColor(ctx, field, obj)
+		case "impresionesBN":
+			out.Values[i] = ec._ContadorCopia_impresionesBN(ctx, field, obj)
+		case "impresionesColor":
+			out.Values[i] = ec._ContadorCopia_impresionesColor(ctx, field, obj)
+		case "sucursal":
+			out.Values[i] = ec._ContadorCopia_sucursal(ctx, field, obj)
+		case "numeroCaja":
+			out.Values[i] = ec._ContadorCopia_numeroCaja(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3389,6 +8073,48 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec._Mutation_eliminarUsuarioById(ctx, field)
 		case "actualizarUsuario":
 			out.Values[i] = ec._Mutation_actualizarUsuario(ctx, field)
+		case "agregarProducto":
+			out.Values[i] = ec._Mutation_agregarProducto(ctx, field)
+		case "eliminarProductoById":
+			out.Values[i] = ec._Mutation_eliminarProductoById(ctx, field)
+		case "actualizarProducto":
+			out.Values[i] = ec._Mutation_actualizarProducto(ctx, field)
+		case "agregarArticulo":
+			out.Values[i] = ec._Mutation_agregarArticulo(ctx, field)
+		case "eliminarArticuloById":
+			out.Values[i] = ec._Mutation_eliminarArticuloById(ctx, field)
+		case "actualizarArticulo":
+			out.Values[i] = ec._Mutation_actualizarArticulo(ctx, field)
+		case "agregarCaja":
+			out.Values[i] = ec._Mutation_agregarCaja(ctx, field)
+		case "eliminarCajaById":
+			out.Values[i] = ec._Mutation_eliminarCajaById(ctx, field)
+		case "ActualizarCaja":
+			out.Values[i] = ec._Mutation_ActualizarCaja(ctx, field)
+		case "agregarContadorCopia":
+			out.Values[i] = ec._Mutation_agregarContadorCopia(ctx, field)
+		case "eliminarContadorCopiaById":
+			out.Values[i] = ec._Mutation_eliminarContadorCopiaById(ctx, field)
+		case "actualizarContadorCopia":
+			out.Values[i] = ec._Mutation_actualizarContadorCopia(ctx, field)
+		case "agregarObservacion":
+			out.Values[i] = ec._Mutation_agregarObservacion(ctx, field)
+		case "eliminarObservacionByID":
+			out.Values[i] = ec._Mutation_eliminarObservacionByID(ctx, field)
+		case "actualizarObservacion":
+			out.Values[i] = ec._Mutation_actualizarObservacion(ctx, field)
+		case "nuevaResponsiva":
+			out.Values[i] = ec._Mutation_nuevaResponsiva(ctx, field)
+		case "eliminarResponsiva":
+			out.Values[i] = ec._Mutation_eliminarResponsiva(ctx, field)
+		case "actualizarResponsiva":
+			out.Values[i] = ec._Mutation_actualizarResponsiva(ctx, field)
+		case "agregarSucursal":
+			out.Values[i] = ec._Mutation_agregarSucursal(ctx, field)
+		case "eliminarSucursalById":
+			out.Values[i] = ec._Mutation_eliminarSucursalById(ctx, field)
+		case "actualizarSucursal":
+			out.Values[i] = ec._Mutation_actualizarSucursal(ctx, field)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3411,10 +8137,17 @@ func (ec *executionContext) _Observacion(ctx context.Context, sel ast.SelectionS
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Observacion")
+		case "id":
+			out.Values[i] = ec._Observacion_id(ctx, field, obj)
 		case "descripcion":
 			out.Values[i] = ec._Observacion_descripcion(ctx, field, obj)
 		case "egreso":
 			out.Values[i] = ec._Observacion_egreso(ctx, field, obj)
+		case "numeroCaja":
+			out.Values[i] = ec._Observacion_numeroCaja(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3444,10 +8177,19 @@ func (ec *executionContext) _Producto(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "nombre":
 			out.Values[i] = ec._Producto_nombre(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "descripcion":
 			out.Values[i] = ec._Producto_descripcion(ctx, field, obj)
 		case "precio":
 			out.Values[i] = ec._Producto_precio(ctx, field, obj)
+		case "stock":
+			out.Values[i] = ec._Producto_stock(ctx, field, obj)
+		case "sucursal":
+			out.Values[i] = ec._Producto_sucursal(ctx, field, obj)
+		case "numeroCaja":
+			out.Values[i] = ec._Producto_numeroCaja(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3483,9 +8225,72 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_usuarios(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
+				return res
+			})
+		case "productos":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_productos(ctx, field)
+				return res
+			})
+		case "sucursales":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_sucursales(ctx, field)
+				return res
+			})
+		case "articulos":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_articulos(ctx, field)
+				return res
+			})
+		case "responsivas":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_responsivas(ctx, field)
+				return res
+			})
+		case "copias":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_copias(ctx, field)
+				return res
+			})
+		case "observaciones":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_observaciones(ctx, field)
 				return res
 			})
 		case "__type":
@@ -3514,6 +8319,11 @@ func (ec *executionContext) _Responsiva(ctx context.Context, sel ast.SelectionSe
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Responsiva")
+		case "id":
+			out.Values[i] = ec._Responsiva_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "numeroCaja":
 			out.Values[i] = ec._Responsiva_numeroCaja(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -3521,20 +8331,43 @@ func (ec *executionContext) _Responsiva(ctx context.Context, sel ast.SelectionSe
 			}
 		case "fechaEntrada":
 			out.Values[i] = ec._Responsiva_fechaEntrada(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "fechaSalida":
 			out.Values[i] = ec._Responsiva_fechaSalida(ctx, field, obj)
+		case "verificacionArticulos":
+			out.Values[i] = ec._Responsiva_verificacionArticulos(ctx, field, obj)
+		case "reporteFaltante":
+			out.Values[i] = ec._Responsiva_reporteFaltante(ctx, field, obj)
 		case "usuarioEncargado":
 			out.Values[i] = ec._Responsiva_usuarioEncargado(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "usuarioReceptor":
 			out.Values[i] = ec._Responsiva_usuarioReceptor(ctx, field, obj)
 		case "productos":
 			out.Values[i] = ec._Responsiva_productos(ctx, field, obj)
 		case "productosVendidos":
 			out.Values[i] = ec._Responsiva_productosVendidos(ctx, field, obj)
+		case "articulosActuales":
+			out.Values[i] = ec._Responsiva_articulosActuales(ctx, field, obj)
+		case "articulosEntregados":
+			out.Values[i] = ec._Responsiva_articulosEntregados(ctx, field, obj)
+		case "copiasActuales":
+			out.Values[i] = ec._Responsiva_copiasActuales(ctx, field, obj)
+		case "copiasEntregadas":
+			out.Values[i] = ec._Responsiva_copiasEntregadas(ctx, field, obj)
 		case "observaciones":
 			out.Values[i] = ec._Responsiva_observaciones(ctx, field, obj)
 		case "caja":
 			out.Values[i] = ec._Responsiva_caja(ctx, field, obj)
+		case "sucursal":
+			out.Values[i] = ec._Responsiva_sucursal(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3564,6 +8397,9 @@ func (ec *executionContext) _Sucursal(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "nombre":
 			out.Values[i] = ec._Sucursal_nombre(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "direccion":
 			out.Values[i] = ec._Sucursal_direccion(ctx, field, obj)
 		case "productos":
@@ -3572,6 +8408,10 @@ func (ec *executionContext) _Sucursal(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Sucursal_usuarios(ctx, field, obj)
 		case "responsivas":
 			out.Values[i] = ec._Sucursal_responsivas(ctx, field, obj)
+		case "articulos":
+			out.Values[i] = ec._Sucursal_articulos(ctx, field, obj)
+		case "contadorCopia":
+			out.Values[i] = ec._Sucursal_contadorCopia(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3617,6 +8457,8 @@ func (ec *executionContext) _Usuario(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Usuario_admin(ctx, field, obj)
 		case "root":
 			out.Values[i] = ec._Usuario_root(ctx, field, obj)
+		case "sucursal":
+			out.Values[i] = ec._Usuario_sucursal(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3873,6 +8715,26 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAgregarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx context.Context, v interface{}) (model.AgregarArticulo, error) {
+	return ec.unmarshalInputAgregarArticulo(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNAgregarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx context.Context, v interface{}) (model.AgregarProducto, error) {
+	return ec.unmarshalInputAgregarProducto(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNAgregarResponsiva2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx context.Context, v interface{}) (model.AgregarResponsiva, error) {
+	return ec.unmarshalInputAgregarResponsiva(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNAgregarSucursal2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarSucursal(ctx context.Context, v interface{}) (model.AgregarSucursal, error) {
+	return ec.unmarshalInputAgregarSucursal(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNAgregarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx context.Context, v interface{}) (model.AgregarUsuario, error) {
+	return ec.unmarshalInputAgregarUsuario(ctx, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	return graphql.UnmarshalBoolean(v)
 }
@@ -3885,6 +8747,26 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNEliminarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarArticulo(ctx context.Context, v interface{}) (model.EliminarArticulo, error) {
+	return ec.unmarshalInputEliminarArticulo(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNEliminarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarProducto(ctx context.Context, v interface{}) (model.EliminarProducto, error) {
+	return ec.unmarshalInputEliminarProducto(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNEliminarResponsivaById2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarResponsivaByID(ctx context.Context, v interface{}) (model.EliminarResponsivaByID, error) {
+	return ec.unmarshalInputEliminarResponsivaById(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNEliminarSucursal2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarSucursal(ctx context.Context, v interface{}) (model.EliminarSucursal, error) {
+	return ec.unmarshalInputEliminarSucursal(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNEliminarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarUsuario(ctx context.Context, v interface{}) (model.EliminarUsuario, error) {
+	return ec.unmarshalInputEliminarUsuario(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
@@ -3915,10 +8797,6 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNModificarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx context.Context, v interface{}) (model.ModificarUsuario, error) {
-	return ec.unmarshalInputModificarUsuario(ctx, v)
-}
-
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	return graphql.UnmarshalString(v)
 }
@@ -3935,43 +8813,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 
 func (ec *executionContext) marshalNUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx context.Context, sel ast.SelectionSet, v model.Usuario) graphql.Marshaler {
 	return ec._Usuario(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNUsuario2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuarioᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Usuario) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
 }
 
 func (ec *executionContext) marshalNUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx context.Context, sel ast.SelectionSet, v *model.Usuario) graphql.Marshaler {
@@ -4210,6 +9051,313 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) unmarshalOActualizarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarArticulo(ctx context.Context, v interface{}) (model.ActualizarArticulo, error) {
+	return ec.unmarshalInputActualizarArticulo(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOActualizarArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarArticulo(ctx context.Context, v interface{}) (*model.ActualizarArticulo, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOActualizarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarArticulo(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOActualizarCaja2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarCaja(ctx context.Context, v interface{}) (model.ActualizarCaja, error) {
+	return ec.unmarshalInputActualizarCaja(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOActualizarCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarCaja(ctx context.Context, v interface{}) (*model.ActualizarCaja, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOActualizarCaja2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarCaja(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOActualizarContadorCopia2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarContadorCopia(ctx context.Context, v interface{}) (model.ActualizarContadorCopia, error) {
+	return ec.unmarshalInputActualizarContadorCopia(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOActualizarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarContadorCopia(ctx context.Context, v interface{}) (*model.ActualizarContadorCopia, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOActualizarContadorCopia2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarContadorCopia(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOActualizarObservacion2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarObservacion(ctx context.Context, v interface{}) (model.ActualizarObservacion, error) {
+	return ec.unmarshalInputActualizarObservacion(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOActualizarObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarObservacion(ctx context.Context, v interface{}) (*model.ActualizarObservacion, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOActualizarObservacion2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarObservacion(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOActualizarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarProducto(ctx context.Context, v interface{}) (model.ActualizarProducto, error) {
+	return ec.unmarshalInputActualizarProducto(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOActualizarProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarProducto(ctx context.Context, v interface{}) (*model.ActualizarProducto, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOActualizarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarProducto(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOActualizarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarUsuario(ctx context.Context, v interface{}) (model.ActualizarUsuario, error) {
+	return ec.unmarshalInputActualizarUsuario(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOActualizarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarUsuario(ctx context.Context, v interface{}) (*model.ActualizarUsuario, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOActualizarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐActualizarUsuario(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx context.Context, v interface{}) (model.AgregarArticulo, error) {
+	return ec.unmarshalInputAgregarArticulo(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx context.Context, v interface{}) ([]*model.AgregarArticulo, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]*model.AgregarArticulo, len(vSlice))
+	for i := range vSlice {
+		res[i], err = ec.unmarshalOAgregarArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAgregarArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx context.Context, v interface{}) (*model.AgregarArticulo, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarArticulo(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarCaja2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarCaja(ctx context.Context, v interface{}) (model.AgregarCaja, error) {
+	return ec.unmarshalInputAgregarCaja(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarCaja(ctx context.Context, v interface{}) (*model.AgregarCaja, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarCaja2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarCaja(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarContadorCopia2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx context.Context, v interface{}) (model.AgregarContadorCopia, error) {
+	return ec.unmarshalInputAgregarContadorCopia(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx context.Context, v interface{}) (*model.AgregarContadorCopia, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarContadorCopia2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarContadorCopia(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarObservacion2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx context.Context, v interface{}) (model.AgregarObservacion, error) {
+	return ec.unmarshalInputAgregarObservacion(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarObservacion2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx context.Context, v interface{}) ([]*model.AgregarObservacion, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]*model.AgregarObservacion, len(vSlice))
+	for i := range vSlice {
+		res[i], err = ec.unmarshalOAgregarObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAgregarObservacion2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx context.Context, v interface{}) (*model.AgregarObservacion, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarObservacion2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarObservacion(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx context.Context, v interface{}) (model.AgregarProducto, error) {
+	return ec.unmarshalInputAgregarProducto(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarProducto2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx context.Context, v interface{}) ([]*model.AgregarProducto, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]*model.AgregarProducto, len(vSlice))
+	for i := range vSlice {
+		res[i], err = ec.unmarshalOAgregarProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAgregarProducto2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx context.Context, v interface{}) (*model.AgregarProducto, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarProducto2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarProducto(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarResponsiva2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx context.Context, v interface{}) (model.AgregarResponsiva, error) {
+	return ec.unmarshalInputAgregarResponsiva(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarResponsiva2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx context.Context, v interface{}) ([]*model.AgregarResponsiva, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]*model.AgregarResponsiva, len(vSlice))
+	for i := range vSlice {
+		res[i], err = ec.unmarshalOAgregarResponsiva2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAgregarResponsiva2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx context.Context, v interface{}) (*model.AgregarResponsiva, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarResponsiva2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarResponsiva(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOAgregarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx context.Context, v interface{}) (model.AgregarUsuario, error) {
+	return ec.unmarshalInputAgregarUsuario(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOAgregarUsuario2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx context.Context, v interface{}) ([]*model.AgregarUsuario, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]*model.AgregarUsuario, len(vSlice))
+	for i := range vSlice {
+		res[i], err = ec.unmarshalOAgregarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOAgregarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx context.Context, v interface{}) (*model.AgregarUsuario, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOAgregarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐAgregarUsuario(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOArticulo2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx context.Context, sel ast.SelectionSet, v model.Articulo) graphql.Marshaler {
+	return ec._Articulo(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOArticulo2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx context.Context, sel ast.SelectionSet, v []*model.Articulo) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOArticulo2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐArticulo(ctx context.Context, sel ast.SelectionSet, v *model.Articulo) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Articulo(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	return graphql.UnmarshalBoolean(v)
 }
@@ -4242,6 +9390,93 @@ func (ec *executionContext) marshalOCaja2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkris
 		return graphql.Null
 	}
 	return ec._Caja(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOContadorCopia2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx context.Context, sel ast.SelectionSet, v model.ContadorCopia) graphql.Marshaler {
+	return ec._ContadorCopia(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOContadorCopia2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx context.Context, sel ast.SelectionSet, v []*model.ContadorCopia) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOContadorCopia2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐContadorCopia(ctx context.Context, sel ast.SelectionSet, v *model.ContadorCopia) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ContadorCopia(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOEliminarCajaById2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarCajaByID(ctx context.Context, v interface{}) (model.EliminarCajaByID, error) {
+	return ec.unmarshalInputEliminarCajaById(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOEliminarCajaById2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarCajaByID(ctx context.Context, v interface{}) (*model.EliminarCajaByID, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOEliminarCajaById2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarCajaByID(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOEliminarContadorCopiaById2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarContadorCopiaByID(ctx context.Context, v interface{}) (model.EliminarContadorCopiaByID, error) {
+	return ec.unmarshalInputEliminarContadorCopiaById(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOEliminarContadorCopiaById2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarContadorCopiaByID(ctx context.Context, v interface{}) (*model.EliminarContadorCopiaByID, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOEliminarContadorCopiaById2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarContadorCopiaByID(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOEliminarObservacionByID2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarObservacionByID(ctx context.Context, v interface{}) (model.EliminarObservacionByID, error) {
+	return ec.unmarshalInputEliminarObservacionByID(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOEliminarObservacionByID2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarObservacionByID(ctx context.Context, v interface{}) (*model.EliminarObservacionByID, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOEliminarObservacionByID2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐEliminarObservacionByID(ctx, v)
+	return &res, err
 }
 
 func (ec *executionContext) unmarshalOFloat2float64(ctx context.Context, v interface{}) (float64, error) {
@@ -4290,16 +9525,27 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 	return ec.marshalOID2string(ctx, sel, *v)
 }
 
-func (ec *executionContext) unmarshalOModificarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx context.Context, v interface{}) (model.ModificarUsuario, error) {
-	return ec.unmarshalInputModificarUsuario(ctx, v)
+func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {
+	return graphql.UnmarshalInt(v)
 }
 
-func (ec *executionContext) unmarshalOModificarUsuario2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx context.Context, v interface{}) (*model.ModificarUsuario, error) {
+func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	return graphql.MarshalInt(v)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOModificarUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐModificarUsuario(ctx, v)
+	res, err := ec.unmarshalOInt2int(ctx, v)
 	return &res, err
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec.marshalOInt2int(ctx, sel, *v)
 }
 
 func (ec *executionContext) marshalOObservacion2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐObservacion(ctx context.Context, sel ast.SelectionSet, v model.Observacion) graphql.Marshaler {
@@ -4476,6 +9722,57 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 		return graphql.Null
 	}
 	return ec.marshalOString2string(ctx, sel, *v)
+}
+
+func (ec *executionContext) marshalOSucursal2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx context.Context, sel ast.SelectionSet, v model.Sucursal) graphql.Marshaler {
+	return ec._Sucursal(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOSucursal2ᚕᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx context.Context, sel ast.SelectionSet, v []*model.Sucursal) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOSucursal2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOSucursal2ᚖgithubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐSucursal(ctx context.Context, sel ast.SelectionSet, v *model.Sucursal) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Sucursal(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOUsuario2githubᚗcomᚋLuisFlahan4051ᚋkrisstalnetᚋAPIᚋgraphᚋmodelᚐUsuario(ctx context.Context, sel ast.SelectionSet, v model.Usuario) graphql.Marshaler {
