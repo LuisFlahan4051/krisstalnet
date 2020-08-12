@@ -4,70 +4,78 @@
 
 type Sucursal {
   id: ID!
-  nombre: String!
-  direccion: String!
-  productos: [Producto!]!
-  usuarios: [Usuario!]!
-  responsivas: [Responsiva!]!
+  nombre: String
+  direccion: String
+  productos: [Producto]
+  usuarios: [Usuario]
+  responsivas: [Responsiva]
 }
 
 type Usuario {
   id: ID!
-  nombre: String!
-  admin: Boolean!
-  root: Boolean!
+  nombre: String
+  mail: String
+  nick: String!
+  pass: String!
+  admin: Boolean
+  root: Boolean
 }
 
 type Producto {
   id: ID!
-  nombre: String!
+  nombre: String
   descripcion: String
-  precio: float!
+  precio: Float
 }
 
 type Observacion{
   descripcion: String
-  egreso: float
+  egreso: Float
 }
 
 type Caja {
-  monedas50centavos: float
-  monedas1Peso: float
-  monedas2Pesos: float
-  monedas5Pesos: float
-  monedas10Pesos: float
-  monedas20Pesos: float
-  billetes20: float
-  billetes50: float
-  billetes100: float
-  billetes200: float
-  billetes500: float
-  billetes1000: float
+  monedas50centavos: Float
+  monedas1Peso: Float
+  monedas2Pesos: Float
+  monedas5Pesos: Float
+  monedas10Pesos: Float
+  monedas20Pesos: Float
+  billetes20: Float
+  billetes50: Float
+  billetes100: Float
+  billetes200: Float
+  billetes500: Float
+  billetes1000: Float
 }
 
 type Responsiva{
-  numeroCaja: int!
-  fechaEntrada: String!
-  fechaSalida: String!
-  usuarioEncargado: Usuario!
-  usuarioReceptor: Usuario!
-  productos: [Producto!]!
+  numeroCaja: Int!
+  fechaEntrada: String
+  fechaSalida: String
+  usuarioEncargado: Usuario
+  usuarioReceptor: Usuario
+  productos: [Producto]
   productosVendidos: [Producto]
   observaciones: [Observacion]
   caja: Caja
 }
 
 type Query {
-  usuarios: [Usuario!]!
+  usuarios(id: ID): [Usuario!]!
 }
 
-input NuevoUsuario {
+input ModificarUsuario {
   id: ID!
-  nombre: String!
-  admin: Boolean!
-  root: Boolean!
+  nombre: String
+  mail: String
+  nick: String!
+  pass: String!
+  admin: Boolean
+  root: Boolean
 }
 
 type Mutation {
-  crearUsuario(input: NuevoUsuario!): Usuario!
+  crearUsuario(input: ModificarUsuario!): Usuario
+  eliminarUsuarioById(input: ModificarUsuario): Usuario
+  actualizarUsuario(input: ModificarUsuario): Usuario
 }
