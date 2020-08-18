@@ -33,11 +33,17 @@ function Login() {
                         <div className="select__area" >
                             <input className="select__input input" type="text" name="name" id="name" defaultValue={"Default"}/>
                             <div className="select__icon" onClick={() => setHandleSelect(!handleSelect)}>
-                                <img src={icon} alt="V" />
+                                <img className={handleSelect ? 'icon-motion-right' : 'icon-motion-left'} src={icon} alt="V"/>
                             </div>
                         </div>
 
-                        <div className="options_area active">
+                        <div className="options_area" style={handleSelect ? {} : { display:'none' } }>
+                            <div className="select__option">Opcion 1</div>
+                            <div className="select__option">Opcion 2</div>
+                            <div className="select__option">Opcion 3</div>
+                            <div className="select__option">Opcion 1</div>
+                            <div className="select__option">Opcion 2</div>
+                            <div className="select__option">Opcion 3</div>
                             <div className="select__option">Opcion 1</div>
                             <div className="select__option">Opcion 2</div>
                             <div className="select__option">Opcion 3</div>

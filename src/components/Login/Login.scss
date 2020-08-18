@@ -78,6 +78,30 @@
     width: 20px;
 }
 
+.icon-motion-right{
+    animation-name: icon-motion-right;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes icon-motion-right{
+    to{
+        transform: rotate(540deg);
+    }
+}
+
+.icon-motion-left{
+    animation-name: icon-motion-left;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes icon-motion-left{
+    to{
+        transform: rotate(-360deg);
+    }
+}
+
 .options_area{
     position: absolute;
     align-content: center;
@@ -89,6 +113,24 @@
     width: 100%;
     margin-top: 5px;
     max-height: 200px;
+    animation-name: options_motion;
+    animation-duration: 500ms;
+    overflow: auto;
+}
+
+.options_area::-webkit-scrollbar{
+    -webkit-appearance: none;
+}
+.options_area::-webkit-scrollbar:vertical {
+    width:1px;
+}
+@keyframes options_motion{
+    from{
+        transform: translateY(-5px);
+    }
+    to{
+        transform: translateY(0px);
+    }
 }
 
 .select__option{
