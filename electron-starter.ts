@@ -32,8 +32,8 @@ async function mainWindow() {
 
   sleep(3000).then(() => {
     const mainWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
+      width: 520,
+      height: 680,
       icon: 'public/logo192.png',
       webPreferences: {
         nodeIntegration: true,

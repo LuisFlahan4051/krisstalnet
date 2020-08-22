@@ -1,6 +1,8 @@
-import React from 'react';
-import './App.scss';
-import Login  from './components/Login/index';
+import React from 'react'
+import { Provider } from 'react-redux'
+import store from './redux/store'
+import './App.scss'
+import Login  from './components/Login/index'
 import Responsiva from './components/Responsiva/index'
 
 /* const { BrowserWindow } = window.require('electron').remote; 
@@ -31,17 +33,19 @@ function mainWindow() {
 
 function App() {
   return (
-    <div className="App">
-      
-      <Login />
-      <Responsiva />
+    <Provider store={store}>
+      <div className="App">
 
-      
-      {/* <header className="App-header">
+        <Login />
+        <Responsiva />
+
+
+        {/* <header className="App-header">
         <p>Hello React and Electron</p>
         <button onClick={mainWindow}>Frameless window!</button>
-      </header> */}
-    </div>
+        </header> */}
+      </div>
+    </Provider>
   );
 }
 

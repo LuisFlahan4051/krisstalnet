@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Login from './Login'
+import { useSelector, RootStateOrAny } from 'react-redux';
 
 function Index() {
-    const [user, setUser] = useState("")
-    const [pass, setPass] = useState("")
+    const currentUser = useSelector((state: RootStateOrAny) => state.currentUser)
+
+    console.log(currentUser)
     
-    const usersList = ["Usuario 1", "Usuario 2", "Usuario 3"]
+    const usersList = ["marchos", "kikis", "mama", "Luis", "dany"]
     return (
         <div>
             <Login users={usersList} />
