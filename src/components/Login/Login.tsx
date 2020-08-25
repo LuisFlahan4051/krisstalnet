@@ -47,7 +47,7 @@ function Login(props: { users: React.ReactNodeArray; }) {
                                 e.preventDefault();
                                 inputPass.current?.focus()
                             }
-                            }}/>
+                        }}/>
                             <div className="select__icon" onClick={() => setHandleSelect(!handleSelect)}>
                                 <img className={handleSelect ? 'icon-motion-right' : 'icon-motion-left'} src={icon} alt="V"/>
                             </div>
@@ -80,8 +80,8 @@ function Login(props: { users: React.ReactNodeArray; }) {
                     onKeyPress={(e: { key: any; preventDefault: () => void; }) => {
                         if (e.key === 'Enter') {
                             e.preventDefault();
-                        inputEntry.current?.focus()
-                    }
+                            inputEntry.current?.focus()
+                        }
                     }}/>
                     <p className="form__link" onClick={link}>Olvide mi contraseña...</p>
                 </div>
