@@ -7,5 +7,6 @@ import "github.com/LuisFlahan4051/krisstalnet/API/graph/model"
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	usuarios []*model.Usuario
+	usuarios    []*model.Usuario
+	responsivas []*model.Responsiva
 }

@@ -171,6 +171,7 @@ func (r *mutationResolver) ActualizarSucursal(ctx context.Context, input model.A
 	panic(fmt.Errorf("not implemented"))
 }
 
+/*Querys*/
 func (r *queryResolver) Usuarios(ctx context.Context, id *string) ([]*model.Usuario, error) {
 	collection := db.Client.Database("krisstalnet-db").Collection("Usuarios")
 	iterador, err := collection.Find(context.TODO(), bson.D{})
