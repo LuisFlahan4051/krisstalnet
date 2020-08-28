@@ -25,11 +25,11 @@
 .login{
     height: 600px;
     width: 500px;
-    background: $backgroun-main;
+    background: $background-login;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $backgroun-main;
+    background-color: $background-login;
 }
 
 .login__logo{
@@ -105,7 +105,7 @@
 .options_area{
     position: absolute;
     align-content: center;
-    background-color: $backgroun-main;
+    background-color: $background-login;
     border-style: solid;
     border-width: 1px;
     border-color: $border;
@@ -146,7 +146,7 @@
 }
 
 .select__option:hover{
-    background-color: $color-white-secondary;
+    background-color: $color-select-hover;
 }
 
 .select__area, .form__password{
@@ -184,12 +184,12 @@
 .form__btnCancel{
     border-color: $color-pink-primary;
     color: $color-pink-primary;
-    background-color: $backgroun-main;
+    background-color: $background-login;
 }
 
 .form__btnCancel:hover{
     border-color: $color-pink-primary;
-    color: $backgroun-main;
+    color: $background-login;
     background-color: $color-pink-primary;
     box-shadow: 0px 3px 6px $shadow;
 }
@@ -197,12 +197,12 @@
 .form__btnEntry{
     border-color: $color-cyan-primary;
     color: $color-cyan-primary;
-    background-color: $backgroun-main;
+    background-color: $background-login;
 }
 
 .form__btnEntry:hover{
     border-color: $color-cyan-primary;
-    color: $backgroun-main;
+    color: $background-login;
     background-color: $color-cyan-primary;
     box-shadow: 0px 3px 6px $shadow;
 }

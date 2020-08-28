@@ -1,5 +1,6 @@
 import React from 'react';
 import './Responsiva.scss';
+import logo from '../../assets/media/img/LogoV3.svg';
 
 
 function Responsiva() {
@@ -7,34 +8,33 @@ function Responsiva() {
         <div className="Responsiva">
 
             {/* ---------------HEADER-------------- */}
-            <header className="responsiva__header">
-                <img className="header__logo" src="" alt=""/>
+            <header className="header">
+                <img className="header__logo" src={logo} alt="Logo"/>
                 <h1 className="header__sucursal">Santa Ana</h1>
                 <form className="header__form main-card">
-                    <div className="form__usuarios">
-                        <div className="inputBox__usuario">
-                            <input type="text" value="Usuario"/>
-                            <p>RESPONSABLE</p>
+                    <div className="form__usuarios__section">
+                        <div className="form__usuario__content usuario1 input-card">
+                            <p className="form__usuario__value">Usuario 1</p>
+                            <p className="form__usuario__title">RESPONSABLE</p>
                         </div>
-                        <div className="inputBox__usuario">
-                            <input type="text" value="Usuario 2"/>
-                            <p>RECIBE</p>
+                        <div className="form__usuario__content usuario2 input-card">
+                            <input className="form__usuario__value" type="text" value="Usuario 2"/>
+                            <p className="form__usuario__title">RECIBE</p>
                         </div>
                     </div>
 
-                    <div className="form__caja">
+                    <div className="form__caja__content input-card">
                         <input type="number" />
                         <p>CAJA</p>
                     </div>
 
-                    <div className="form__fechas">
+                    <div className="form__fechas__section">
                         <label>Entrada:</label>
-                        <div className="input-card">
+                        <div className="form__fechas__content input-card">
                             <input type="datetime" />
                         </div>
-                        <input type="datetime"/>
                         <label>Salida:</label>
-                        <div className="input-card">
+                        <div className="form__fechas__content input-card">
                             <input type="datetime" />
                         </div>
                     </div>
@@ -67,34 +67,33 @@ function Responsiva() {
 
                 {/* ---------------PRODUCTS----------------- */}
                 <div className="body__section-1">
-                    <div className="main-card" >
+                    <div className="products main-card">
                         <h2>Productos</h2>
 
-                        <div className="input-card">
+                        <div className="products__content-sold input-card">
                             <h3>Vendidos</h3>
-                            <table>
-                                <tr>
-                                    <td>
+                            <div className="products__sold">
+                                <ul>
+                                    <li>
                                         <p>item</p>
                                         <p>0</p>
-                                    </td>
-                                </tr>
-
-                            </table>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
-                        <div className=" input-card">
+                        <div className="products__content-inventory input-card">
                             <h3>Recibidos</h3>
                             <h3>Entregados</h3>
-                            <table>
-                                <tr>
-                                    <td>
+                            <div className="products__inventory">
+                                <ul>
+                                    <li>
                                         <p>item</p>
                                         <input type="number" />
                                         <input type="number" />
-                                    </td>
-                                </tr>
-                            </table>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -109,30 +108,30 @@ function Responsiva() {
                     
 
                     {/* ----------------COPY------------------ */}
-                    <div className="main-card">
+                    <div className="copy main-card">
                         <h2>Copias</h2>
-                        <div>
+                        <div className="copy__section">
                             <label>Ingreso de papel</label>
                             <input type="checkbox" />
                             <div>
-                                <div className="input-card">
+                                <div className="copy__content-topLeft input-card">
                                     <input type="text" />
                                     <p>Copias B/N</p>
                                 </div>
-                                <div className="input-card">
+                                <div className="copy__content-topRight input-card">
                                     <input type="text" />
                                     <p>Copias Color</p>
                                 </div>
-                                <div className="input-card">
+                                <div className="copy__content-bottomLeft input-card">
                                     <input type="text" />
                                     <p>Impresiones B/N</p>
                                 </div>
-                                <div className="input-card">
+                                <div className="copy__content-bottomRight input-card">
                                     <input type="text" />
                                     <p>Impresiones Color</p>
                                 </div>
                             </div>
-                            <div className="input-card">
+                            <div className="copy__content-paper input-card">
                                 <input type="text" />
                                 <p>Papel</p>
                             </div>
@@ -144,20 +143,20 @@ function Responsiva() {
 
 
                     {/* -----------------Observations-------------------- */}
-                    <div className="main-card">
+                    <div className="observations main-card">
                         <h2>Observaciones</h2>
-                        <div className="input-card">
+                        <div className="observations__content input-card">
                             <h3>Detalle</h3>
                             <h3>Monto</h3>
-                            <table>
-                                <tr>
-                                    <td>
+                            <div>
+                                <ul>
+                                    <li>
                                         <input type="text" />
                                         <label>$</label>
                                         <input type="number" />
-                                    </td>
-                                </tr>
-                            </table>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <button>+</button>
                     </div>
@@ -169,7 +168,7 @@ function Responsiva() {
 
 
                     {/* --------------------REPORTS------------------------ */}
-                    <div className="section-2__btnsArea">
+                    <div className="btnsArea">
                         <input type="checkbox" />
                         <label>Gadgets y dispositivos verificados.</label>
                         <button>Reportar dispositivos faltantes respcto al turno anterior</button>
@@ -185,8 +184,8 @@ function Responsiva() {
 
 
                     {/* -------------------INITIAL COUNT---------------------- */}
-                    <div className="main-card">
-                        <div className="input-card">
+                    <div className="initialCount main-card">
+                        <div className="initialCount__content input-card">
                             <label>$</label>
                             <input type="number"/>
                             <p>Caja Inicial</p>
@@ -196,59 +195,59 @@ function Responsiva() {
 
 
                     {/* ------------------------ARQUEO--------------------------- */}
-                    <div className="main-card">
+                    <div className="arqueo main-card">
                         <h2>Arqueo</h2>
-                        <div>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <label>$0.5</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$1</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$2</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$5</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$10</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$20</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <label>$20</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$50</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$100</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$200</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$500</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                    <td>
-                                        <label>$1000</label><div className="input-card"><input type="number"/></div>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div className="arqueo__section-inventory">
+                            <div>
+                                <ul>
+                                    <li>
+                                        <label>$0.5</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$1</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$2</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$5</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$10</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$20</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>
+                                        <label>$20</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$50</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$100</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$200</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$500</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                    <li>
+                                        <label>$1000</label><div className="arqueo__content input-card"><input type="number"/></div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
 
 
                         {/* -----------------------COUNT--------------------------- */}
-                        <div>
+                        <div className="aqueo__section-count">
                             <div>
                                 <div><p>Efectivo:</p><p>$0</p></div>
                                 <p>Observaciones:</p>
@@ -265,9 +264,9 @@ function Responsiva() {
 
 
                     {/* --------------------------MAIN COUNT------------------------------- */}
-                    <div className="resalted-card">
+                    <div className="mainCount resalted-card">
                         <h2>Contadores</h2>
-                        <div className="input-card">
+                        <div className="mainCount__content input-card">
                             <div>
                                 <p>Copias:</p>
                                 <p>Productos:</p>
