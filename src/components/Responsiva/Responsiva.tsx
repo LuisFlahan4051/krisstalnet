@@ -2,7 +2,7 @@ import React from 'react'
 import './Responsiva.scss'
 import logo from '../../assets/media/img/LogoV3.svg'
 
-import print from '../../assets/media/img/Impresora.svg'
+import print from '../../assets/media/img/Guardado.svg'
 import save from '../../assets/media/img/Guardado.svg'
 import tools from '../../assets/media/img/Herramientas.svg'
 

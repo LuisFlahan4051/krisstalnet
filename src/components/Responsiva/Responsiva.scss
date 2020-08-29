@@ -13,12 +13,15 @@ $text-size-label-1: 15px;
 $text-size-value-1: 15px;
 $text-size-value-2: 50px;
 
+$app-size-height: 1080px;
+$app-size-width: 1600px;
+
 .Responsiva{
     display: grid;
-    height: 1080px;
-    width: 1600px;
+    height: $app-size-height;
+    width: $app-size-width;
     grid-template-columns: $option-size auto;
-    grid-template-rows: $header-size auto;
+    grid-template-rows: $header-size ($app-size-height - $header-size);
     grid-template-areas: 
         "header header"
         "options body"
@@ -64,6 +67,11 @@ input{
     border-style: solid;
     border-width: 5px;
     box-shadow: 0px 0px 6px $shadow;
+}
+
+.generalBtn img{
+    height: 70%;
+    width: 70%;
 }
 
 
@@ -247,7 +255,11 @@ input{
 .options{
     grid-area: options;
     width: $option-size;
+    height: 100%;
     background-color: $color-ribbon;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
     .options__mainBtns-section{
@@ -264,7 +276,13 @@ input{
         .adminBtn{
             border-color: $color-green-menta;
         }
+    /**/
 
+    .options__controlBtns-section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
         .paperBtn{
             border-color: $color-pink-primary;
         }
@@ -278,12 +296,6 @@ input{
             border-color: $color-cyan-primary;
         }
     /**/
-
-    .options__controlBtns-section{
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-    }
 /**/
 
 
@@ -294,4 +306,5 @@ input{
 .body{
     grid-area: body;
     background-color: $background-responsiva;
+    height: 100%;
 }
