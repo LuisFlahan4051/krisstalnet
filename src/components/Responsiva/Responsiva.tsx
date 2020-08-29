@@ -1,7 +1,15 @@
-import React from 'react';
-import './Responsiva.scss';
-import logo from '../../assets/media/img/LogoV3.svg';
+import React from 'react'
+import './Responsiva.scss'
+import logo from '../../assets/media/img/LogoV3.svg'
 
+import print from '../../assets/media/img/Impresora.svg'
+import save from '../../assets/media/img/Guardado.svg'
+import tools from '../../assets/media/img/Herramientas.svg'
+
+import paper from '../../assets/media/img/ManojoHojas.svg'
+import products from '../../assets/media/img/Cola.svg'
+import articles from '../../assets/media/img/Limpieza.svg'
+import devices from '../../assets/media/img/Pantalla.svg'
 
 function Responsiva() {
     return (
@@ -13,29 +21,31 @@ function Responsiva() {
                 <h1 className="header__sucursal">Santa Ana</h1>
                 <form className="header__form main-card">
                     <div className="form__usuarios__section">
-                        <div className="form__usuario__content usuario1 input-card">
-                            <p className="form__usuario__value">Usuario 1</p>
-                            <p className="form__usuario__title">RESPONSABLE</p>
+                        <div className="usuario__content usuario1 input-card">
+                            <p className="usuario__value">Usuario 1</p>
+                            <p className="usuario__title">RESPONSABLE</p>
                         </div>
-                        <div className="form__usuario__content usuario2 input-card">
-                            <input className="form__usuario__value" type="text" value="Usuario 2"/>
-                            <p className="form__usuario__title">RECIBE</p>
+                        <div className="usuario__content usuario2 input-card">
+                            <input className="usuario__value" type="text" value="Usuario 2"/>
+                            <p className="usuario__title">RECIBE</p>
                         </div>
                     </div>
 
                     <div className="form__caja__content input-card">
-                        <input type="number" />
-                        <p>CAJA</p>
+                        <input className="caja__value" type="text"/>
+                        <p className="caja__title">CAJA</p>
                     </div>
 
                     <div className="form__fechas__section">
-                        <label>Entrada:</label>
-                        <div className="form__fechas__content input-card">
-                            <input type="datetime" />
+                        <label className="fecha__label">Entrada:</label>
+                        <div className="fecha__content input-card">
+                            <input className="fecha__date" type="datetime" />
+                            <input className="fecha__time" type="datetime"/>
                         </div>
-                        <label>Salida:</label>
-                        <div className="form__fechas__content input-card">
-                            <input type="datetime" />
+                        <label className="fecha__label" >Salida:</label>
+                        <div className="fecha__content input-card">
+                            <input className="fecha__date" type="datetime" />
+                            <input className="fecha__time" type="datetime" />
                         </div>
                     </div>
                 </form>
@@ -45,15 +55,15 @@ function Responsiva() {
             {/* ----------------OPTIONS--------------- */}
             <div className="options">
                 <div className="options__mainBtns-section">
-                    <button className="printBtn generalBtn"><img src="" alt="Imprimir"/></button>
-                    <button className="saveBtn  generalBtn"><img src="" alt="Guarda"/></button>
-                    <button className="adminBtn generalBtn"><img src="" alt="Administrador"/></button>
+                    <button className="printBtn generalBtn"><img src={print} alt="Imprimir"/></button>
+                    <button className="saveBtn  generalBtn"><img src={save} alt="Guarda"/></button>
+                    <button className="adminBtn generalBtn"><img src={tools} alt="Administrador"/></button>
                 </div>
                 <div className="options__controlBtns-section">
-                    <button className="copysBtn    generalBtn"><img src="" alt="Control de Copias"/></button>
-                    <button className="productsBtn generalBtn"><img src="" alt="Control de Productos"/></button>
-                    <button className="articlesBtn generalBtn"><img src="" alt="Control de Artículos"/></button>
-                    <button className="devicesBtn  generalBtn"><img src="" alt="Control de Dispositivos"/></button>
+                    <button className="paperBtn    generalBtn"><img src={paper} alt="Control de Copias"/></button>
+                    <button className="productsBtn generalBtn"><img src={products} alt="Control de Productos"/></button>
+                    <button className="articlesBtn generalBtn"><img src={articles} alt="Control de Artículos"/></button>
+                    <button className="devicesBtn  generalBtn"><img src={devices} alt="Control de Dispositivos"/></button>
                 </div>
             </div>
 

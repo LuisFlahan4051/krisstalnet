@@ -1,8 +1,17 @@
 @import '../../Paleta-colores.scss';
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+//@import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Satisfy&display=swap');
 
 $option-size: 100px;
-$header-size: 150px;
+$header-size: 180px;
 $border: 17px;
+$text-size-sucursal: 50px;
+$text-size-label-1: 15px;
+$text-size-value-1: 15px;
+$text-size-value-2: 50px;
 
 .Responsiva{
     display: grid;
@@ -20,15 +29,19 @@ $border: 17px;
 
 .main-card{
     background-color: $color-mainCard;
+    box-shadow: 0px 3px 6px $shadow;
 }
 
 .input-card{
     background-color: $color-inputCard;
 }
 
+
 p, label{
     margin: 0px;
     color: $text-responsiva;
+    font-family: 'Merriweather', serif;
+    font-size: $text-size-label-1;
 }
 
 input{
@@ -36,15 +49,22 @@ input{
 	-webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
-    /* width: 100%;
-    height: 100%;
-    padding: 0px;
     border-style: none;
     border-width: 0px;
-    text-align: center;
-    color: $text-responsiva; */
+    padding: 0px;
+    font-family: 'Merriweather', serif;
+    color: $text-responsiva;
 }
 
+.generalBtn{
+    background-color: $color-ribbon;
+    height: 65px;
+    width: 65px;
+    border-radius: 100%;
+    border-style: solid;
+    border-width: 5px;
+    box-shadow: 0px 0px 6px $shadow;
+}
 
 
 
@@ -58,84 +78,163 @@ input{
     height: $header-size;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-}
-
-.header__logo{
-    height: 90%;
-}
-
-.header__sucursal{
-    margin: 0px;
-    min-width: 160px;
-    color: $color-green-menta;
-}
-
-.header__form{
-    height: 75%;
-    width: 45%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    border-radius: $border;
-    box-shadow: 0px 3px 6px $shadow;
-}
-
-.form__usuarios__section{
-    display: flex;
-    height: 75%;
-    border-radius: $border;
-    box-shadow: 0px 0px 6px $shadow;
-}
-
-.form__usuario__content{
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
 }
 
-.form__usuario__value{
-    margin-top: 30%;
-}
 
-.form__usuario__title{
-    width: 90%;
-    border-top: 1px solid $text;
-    text-align: center;
-}
 
-.usuario1{
-    border-top-left-radius: $border;
-    border-bottom-left-radius: $border;
-    width: 50%;
-}
 
-.usuario2{
-    border-top-right-radius: $border;
-    border-bottom-right-radius: $border;
-    width: 50%;
-}
+    .header__logo{
+        margin-left: 1%;
+        height: 90%;
+    }
 
-.form__caja__content{
-    display: flex;
-    flex-direction: column;
-    height: 75%;
-    border-radius: $border;
-    box-shadow: 0px 0px 6px $shadow;
-}
 
-.form__fecha__section{
-    display: flex;
-    flex-direction: column;
-}
 
-.form__fechas__content{
-    width: 240px;
-    border-radius: $border;
-    box-shadow: 0px 0px 6px $shadow;
-}
 
+
+
+    .header__sucursal{
+        margin: 0px;
+        min-width: 160px;
+        color: $color-green-menta;
+        //font-family: 'Merriweather', serif;
+        font-family: 'Libre Baskerville', serif;
+
+        //font-family: 'Marck Script', cursive;
+        //font-family: 'Satisfy', cursive;
+        font-size: $text-size-sucursal;
+        text-align: center;
+    }
+
+
+
+
+
+
+    .header__form{
+        margin-right: 2%;
+        height: 80%;
+        width: 750px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        border-radius: $border;
+    }
+
+
+
+        .form__usuarios__section{
+            display: flex;
+            height: 75%;
+            width: 40%;
+            border-radius: $border;
+            box-shadow: 0px 0px 6px $shadow;
+        }
+
+            .usuario__content{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+                .usuario__value{
+                    margin-top: 40%;
+                    width: 90%;
+                    text-align: center;
+                    font-size: $text-size-label-1;
+                }
+
+                .usuario__title{
+                    margin-bottom: 5%;
+                    width: 90%;
+                    border-top: 1px solid $text;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .usuario1{
+                    border-top-left-radius: $border;
+                    border-bottom-left-radius: $border;
+                    width: 50%;
+                }
+
+                .usuario2{
+                    border-top-right-radius: $border;
+                    border-bottom-right-radius: $border;
+                    width: 50%;
+                }
+        /**/
+
+
+
+
+        .form__caja__content{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 75%;
+            width: 20%;
+            border-radius: $border;
+            box-shadow: 0px 0px 6px $shadow;
+            font-weight: bold;
+        }
+
+            .caja__value{
+                margin-top: 10%;
+                height: 60%;
+                width: 90%;
+                text-align: center;
+                font-size: $text-size-value-2;
+            }
+
+            .caja__title{
+                margin-bottom: 5%;
+                width: 90%;
+                border-top: 1px solid $text;
+                text-align: center;
+            }
+        /**/
+
+
+
+        .form__fechas__section{
+            display: flex;
+            flex-direction: column;
+            height: 75%;
+            width: 30%;
+        }
+
+            .fecha__label{
+                margin-left: 10px;
+                margin-top: 3%;
+            }
+
+            .fecha__content{
+                display: flex;
+                width: 100%;
+                height: 25px;
+                border-radius: $border;
+                box-shadow: 0px 0px 6px $shadow;
+            }
+                .fecha__date{
+                    margin-left: 10px;
+                    width: 70%;
+                    font-size: $text-size-value-1;
+                }
+
+                .fecha__time{
+                    width: 20%;
+                    font-size: $text-size-value-1;
+                    text-align: center;
+                    font-weight: bold;
+                }
+            /**/
+        /**/
+    /**/    
+/**/
 
 
 
@@ -146,12 +245,46 @@ input{
 
 /*---------------OPTIONS----------------*/
 .options{
-    width: $option-size;
     grid-area: options;
+    width: $option-size;
     background-color: $color-ribbon;
 }
 
+    .options__mainBtns-section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+        .printBtn{
+            border-color: $color-green-pastel;
+        }
+        .saveBtn{
+            border-color: $color-green-primary;
+        }
+        .adminBtn{
+            border-color: $color-green-menta;
+        }
 
+        .paperBtn{
+            border-color: $color-pink-primary;
+        }
+        .productsBtn{
+            border-color: $color-magent;
+        }
+        .articlesBtn{
+            border-color: $color-purple;
+        }
+        .devicesBtn{
+            border-color: $color-cyan-primary;
+        }
+    /**/
+
+    .options__controlBtns-section{
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+/**/
 
 
 
