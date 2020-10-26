@@ -2,32 +2,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
-//@import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
-//@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Satisfy&display=swap');
+/*---------------VARIABLES---------------------*/
+$app-size-height: 100%;
+$app-size-width: 100%;
 
-$option-size: 100px;
-$header-size: 180px;
-$border: 17px;
-$text-size-sucursal: 50px;
-$text-size-label-1: 15px;
-$text-size-value-1: 15px;
-$text-size-value-2: 50px;
+$option-size: 65px;
+$header-size: 3cm;
 
-$app-size-height: 1080px;
-$app-size-width: 1600px;
+$standar-border-radius: 17px;
+
+$text-size-sucursal: 35px;
+
+$text-size-label-1: 10px;
+$text-size-value-1: 10px;
+
+$text-size-value-2: 30px;
+
+$text-size-target-title: 18px;
+
+$text-size-list: 12px;
+
+$main-input-size-height: 2cm;
+$main-input-size-width: 2.5cm; 
+
+
+
+
+
+/*------------------GENERAL STYLES----------------------*/
+.Index-responsiva{
+    height: 100%;
+    width: 100%;
+}
 
 .Responsiva{
     display: grid;
     height: $app-size-height;
     width: $app-size-width;
     grid-template-columns: $option-size auto;
-    grid-template-rows: $header-size ($app-size-height - $header-size);
+    grid-template-rows: $header-size calc(100% - #{$header-size});
     grid-template-areas: 
         "header header"
         "options body"
     ;
 
     border: 1px solid black;
+    background-color: $background-responsiva;
+    font-family: 'Merriweather', serif;
 }
 
 .main-card{
@@ -39,6 +60,16 @@ $app-size-width: 1600px;
     background-color: $color-inputCard;
 }
 
+h2, h3{
+    color: $text-target-title;
+    margin: 0px;
+}
+
+h2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: $text-size-target-title;
+}
 
 p, label{
     margin: 0px;
@@ -58,21 +89,48 @@ input{
     font-family: 'Merriweather', serif;
     color: $text-responsiva;
 }
+input::placeholder{
+    color: $placeholder;
+}
 
 .generalBtn{
     background-color: $color-ribbon;
-    height: 65px;
-    width: 65px;
+    height: 45px;
+    width: 45px;
     border-radius: 100%;
     border-style: solid;
-    border-width: 5px;
+    border-width: 3px;
     box-shadow: 0px 0px 6px $shadow;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.generalBtn img{
-    height: 70%;
-    width: 70%;
-}
+    .generalBtn:hover{
+        cursor: pointer;
+    }
+
+    .generalBtn img{
+        height: 90%;
+        width: 90%;
+    }
+/**/
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -87,6 +145,7 @@ input{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0px 0px 6px $shadow;
 }
 
 
@@ -100,17 +159,10 @@ input{
 
 
 
-
-
     .header__sucursal{
         margin: 0px;
-        min-width: 160px;
         color: $color-green-menta;
-        //font-family: 'Merriweather', serif;
         font-family: 'Libre Baskerville', serif;
-
-        //font-family: 'Marck Script', cursive;
-        //font-family: 'Satisfy', cursive;
         font-size: $text-size-sucursal;
         text-align: center;
     }
@@ -118,25 +170,23 @@ input{
 
 
 
-
-
     .header__form{
         margin-right: 2%;
-        height: 80%;
-        width: 750px;
+        height: 2.5cm;
+        width: 16cm;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        border-radius: $border;
+        border-radius: $standar-border-radius;
     }
 
 
 
         .form__usuarios__section{
             display: flex;
-            height: 75%;
-            width: 40%;
-            border-radius: $border;
+            height: $main-input-size-height;
+            width: $main-input-size-width * 2;
+            border-radius: $standar-border-radius;
             box-shadow: 0px 0px 6px $shadow;
         }
 
@@ -148,14 +198,15 @@ input{
             }
 
                 .usuario__value{
-                    margin-top: 40%;
+                    margin-top: 1.2cm;
+                    height: 1.5cm;
                     width: 90%;
                     text-align: center;
                     font-size: $text-size-label-1;
                 }
 
                 .usuario__title{
-                    margin-bottom: 5%;
+                    margin-bottom: 0.2cm;
                     width: 90%;
                     border-top: 1px solid $text;
                     text-align: center;
@@ -163,14 +214,14 @@ input{
                 }
 
                 .usuario1{
-                    border-top-left-radius: $border;
-                    border-bottom-left-radius: $border;
+                    border-top-left-radius: $standar-border-radius;
+                    border-bottom-left-radius: $standar-border-radius;
                     width: 50%;
                 }
 
                 .usuario2{
-                    border-top-right-radius: $border;
-                    border-bottom-right-radius: $border;
+                    border-top-right-radius: $standar-border-radius;
+                    border-bottom-right-radius: $standar-border-radius;
                     width: 50%;
                 }
         /**/
@@ -183,9 +234,9 @@ input{
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            height: 75%;
-            width: 20%;
-            border-radius: $border;
+            height: $main-input-size-height;
+            width: $main-input-size-width;
+            border-radius: $standar-border-radius;
             box-shadow: 0px 0px 6px $shadow;
             font-weight: bold;
         }
@@ -211,22 +262,27 @@ input{
         .form__fechas__section{
             display: flex;
             flex-direction: column;
-            height: 75%;
-            width: 30%;
+            width: $main-input-size-width * 2.5;
         }
 
             .fecha__label{
                 margin-left: 10px;
-                margin-top: 3%;
+                margin-top: 5px;
             }
 
             .fecha__content{
                 display: flex;
+                align-items: center;
                 width: 100%;
-                height: 25px;
-                border-radius: $border;
+                height: 0.5cm;
+                border-radius: $standar-border-radius;
                 box-shadow: 0px 0px 6px $shadow;
             }
+                .fecha__content p{
+                    color: $placeholder;
+                }
+
+
                 .fecha__date{
                     margin-left: 10px;
                     width: 70%;
@@ -251,6 +307,18 @@ input{
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /*---------------OPTIONS----------------*/
 .options{
     grid-area: options;
@@ -260,6 +328,7 @@ input{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: 0px 0px 6px #b3b3b341;
 }
 
     .options__mainBtns-section{
@@ -270,11 +339,22 @@ input{
         .printBtn{
             border-color: $color-green-pastel;
         }
+        .printBtn:hover{
+            background-color: $color-green-pastel;
+        }
+        
         .saveBtn{
             border-color: $color-green-primary;
         }
+        .saveBtn:hover{
+            background-color: $color-green-primary;
+        }
+        
         .adminBtn{
             border-color: $color-green-menta;
+        }
+        .adminBtn:hover{
+            background-color: $color-green-menta;
         }
     /**/
 
@@ -286,14 +366,29 @@ input{
         .paperBtn{
             border-color: $color-pink-primary;
         }
+        .paperBtn:hover{
+            background-color: $color-pink-primary;
+        }
+
         .productsBtn{
             border-color: $color-magent;
         }
+        .productsBtn:hover{
+            background-color: $color-magent;
+        }
+
         .articlesBtn{
             border-color: $color-purple;
         }
+        .articlesBtn:hover{
+            background-color: $color-purple;
+        }
+
         .devicesBtn{
             border-color: $color-cyan-primary;
+        }
+        .devicesBtn:hover{
+            background-color: $color-cyan-primary;
         }
     /**/
 /**/
@@ -302,9 +397,230 @@ input{
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*---------------BODY------------------*/
 .body{
     grid-area: body;
-    background-color: $background-responsiva;
-    height: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 100%;
+    grid-template-areas: 
+    "section1 section2 section3"
+    ;
+    color: $text-responsiva;
 }
+
+
+
+
+
+    .body__section-1{
+        grid-area: section1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+        /*------------------PRODUCTS----------------------*/
+        .products{
+            width: 7cm;
+            height: 95%;
+            border-radius: $standar-border-radius;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+            
+
+            .products__content-sold{
+                height: 30%;
+                width: 90%;
+                border-top-left-radius: $standar-border-radius;
+                border-top-right-radius: $standar-border-radius;
+                box-shadow: 0px 0px 6px $shadow;
+                margin-bottom: 2px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+                .products__subtitle__box{
+                    width: 90%;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                    .products__subtitle-1{
+                        margin-top: 10px;
+                        font-size: $text-size-label-1;
+                        margin-right: 10px;
+                    }
+
+                    .products__subtitle-2{
+                        margin-top: 10px;
+                        font-size: $text-size-label-1;
+                    }
+                /**/
+
+                .products__sold{
+                    display: flex;
+                    flex-direction: column;
+                    width: 90%;
+                    height: 80%;
+                    font-size: $text-size-list;
+                }
+
+                    .sold__item{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid $text;
+                    }
+                        .sold__item__name{
+                            margin-left: 10px;
+                            max-width: 130px;
+                        }
+
+                        .sold__item__value-2{
+                            margin-right: 20px;
+                            font-weight: bold;
+                        }
+                    /**/
+                /**/
+            /**/
+
+            .products__content-inventory{
+                height: 57%;
+                width: 90%;
+                border-bottom-left-radius: $standar-border-radius;
+                border-bottom-right-radius: $standar-border-radius;
+                box-shadow: 0px 0px 6px $shadow;
+                margin-top: 2px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+                .products__inventory{
+                    display: flex;
+                    flex-direction: column;
+                    width: 90%;
+                    height: 85%;
+                    font-size: $text-size-list;
+                }
+                   
+                        .inventory__item{
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            border-bottom: 1px solid $text;
+                        }
+
+                            .inventory__item__name{
+                                margin-left: 10px;
+                                width: 40%;
+                            }
+
+                            .inventory__item__value-1{
+                                width: 40px;
+                                height: 100%;
+                                text-align: center;
+                                margin-right: 7px;
+                                font-weight: bold;
+                                font-size: $text-size-list;
+                            }
+
+                            .inventory__item__division{
+                                border-left: 1px solid $text;
+                                height: 80%;
+                                margin-right: 7px;
+                            }
+
+
+                            .inventory__item__value-2{
+                                width: 40px;
+                                height: 100%;
+                                text-align: center;
+                                margin-right: 10px;
+                                font-weight: bold;
+                                font-size: $text-size-list;
+                            }
+                        /**/
+                    /**/        
+                /**/
+            /**/
+        /**/
+    /**/
+
+
+
+
+
+
+
+
+
+    .body__section-2{
+        grid-area: section2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+        .copy{
+            border-radius: $standar-border-radius;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+            .copy__paper__checkbox{
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .copy__section__display{
+                display: flex;
+            }
+                .copy__section{
+                    display: gr4051
+                    ;
+                    grid-template-areas: 
+                    "copiasBN copiasC"
+                    "impresionesBN impresionesC"
+                    ;
+                }
+
+            /**/    
+        /**/
+    /**/
+
+
+
+
+
+
+
+
+
+    .body__section-3{
+        grid-area: section3;
+        display: flex;
+        flex-direction: column;
+    }
+/**/

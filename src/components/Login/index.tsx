@@ -38,7 +38,7 @@ function Index() {
     })
     
     return (
-        <div>
+        <div className="Index-login">
             <Login users={usersList} />
         </div>
     )

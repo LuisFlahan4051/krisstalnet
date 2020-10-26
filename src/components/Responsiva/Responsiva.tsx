@@ -2,7 +2,7 @@ import React from 'react'
 import './Responsiva.scss'
 import logo from '../../assets/media/img/LogoV3.svg'
 
-import print from '../../assets/media/img/Guardado.svg'
+import print from '../../assets/media/img/impresora.svg'
 import save from '../../assets/media/img/Guardado.svg'
 import tools from '../../assets/media/img/Herramientas.svg'
 
@@ -15,6 +15,24 @@ function Responsiva() {
     return (
         <div className="Responsiva">
 
+            {/* ----------------OPTIONS--------------- */}
+            {/* Se puso hasta arriba para hacer concordar las capas de sombra */}
+            <nav className="options">
+                <div className="options__mainBtns-section">
+                    <button className="printBtn generalBtn"><img src={print} alt="Imprimir" /></button>
+                    <button className="saveBtn  generalBtn"><img src={save} alt="Guarda" /></button>
+                    <button className="adminBtn generalBtn"><img src={tools} alt="Administrador" /></button>
+                </div>
+                <div className="options__controlBtns-section">
+                    <button className="paperBtn    generalBtn"><img src={paper} alt="Control de Copias" /></button>
+                    <button className="productsBtn generalBtn"><img src={products} alt="Control de Productos" /></button>
+                    <button className="articlesBtn generalBtn"><img src={articles} alt="Control de Artículos" /></button>
+                    <button className="devicesBtn  generalBtn"><img src={devices} alt="Control de Dispositivos" /></button>
+                </div>
+            </nav>
+
+
+
             {/* ---------------HEADER-------------- */}
             <header className="header">
                 <img className="header__logo" src={logo} alt="Logo"/>
@@ -26,46 +44,35 @@ function Responsiva() {
                             <p className="usuario__title">RESPONSABLE</p>
                         </div>
                         <div className="usuario__content usuario2 input-card">
-                            <input className="usuario__value" type="text" value="Usuario 2"/>
+                            <input className="usuario__value" type="text" placeholder="Usuario 2"/>
                             <p className="usuario__title">RECIBE</p>
                         </div>
                     </div>
 
                     <div className="form__caja__content input-card">
-                        <input className="caja__value" type="text"/>
+                        <input className="caja__value" type="text" placeholder="0"/>
                         <p className="caja__title">CAJA</p>
                     </div>
 
                     <div className="form__fechas__section">
                         <label className="fecha__label">Entrada:</label>
                         <div className="fecha__content input-card">
-                            <input className="fecha__date" type="datetime" />
-                            <input className="fecha__time" type="datetime"/>
+                            <input className="fecha__date" type="datetime" placeholder="lunes 1 de enero del 2000"/>
+                            <p>|</p>
+                            <input className="fecha__time" maxLength={5} type="datetime" placeholder="24:00"/>
                         </div>
                         <label className="fecha__label" >Salida:</label>
                         <div className="fecha__content input-card">
-                            <input className="fecha__date" type="datetime" />
-                            <input className="fecha__time" type="datetime" />
+                            <input className="fecha__date" type="datetime" placeholder="lunes 1 de enero del 2000"/>
+                            <p>|</p>
+                            <input className="fecha__time" maxLength={5} type="datetime" placeholder="24:00" />
                         </div>
                     </div>
                 </form>
             </header>
 
 
-            {/* ----------------OPTIONS--------------- */}
-            <div className="options">
-                <div className="options__mainBtns-section">
-                    <button className="printBtn generalBtn"><img src={print} alt="Imprimir"/></button>
-                    <button className="saveBtn  generalBtn"><img src={save} alt="Guarda"/></button>
-                    <button className="adminBtn generalBtn"><img src={tools} alt="Administrador"/></button>
-                </div>
-                <div className="options__controlBtns-section">
-                    <button className="paperBtn    generalBtn"><img src={paper} alt="Control de Copias"/></button>
-                    <button className="productsBtn generalBtn"><img src={products} alt="Control de Productos"/></button>
-                    <button className="articlesBtn generalBtn"><img src={articles} alt="Control de Artículos"/></button>
-                    <button className="devicesBtn  generalBtn"><img src={devices} alt="Control de Dispositivos"/></button>
-                </div>
-            </div>
+            
 
 
 
@@ -81,28 +88,29 @@ function Responsiva() {
                         <h2>Productos</h2>
 
                         <div className="products__content-sold input-card">
-                            <h3>Vendidos</h3>
+                            <div className="products__subtitle__box">
+                                <h3 className="products__subtitle-2">Vendidos</h3>
+                            </div>
                             <div className="products__sold">
-                                <ul>
-                                    <li>
-                                        <p>item</p>
-                                        <p>0</p>
-                                    </li>
-                                </ul>
+                                <div className="sold__item">
+                                    <p className="sold__item__name">item</p>
+                                    <p className="sold__item__value-2">0</p>
+                                </div>
                             </div>
                         </div>
 
                         <div className="products__content-inventory input-card">
-                            <h3>Recibidos</h3>
-                            <h3>Entregados</h3>
+                            <div className="products__subtitle__box">
+                                <h3 className="products__subtitle-1">Recibidos</h3>
+                                <h3 className="products__subtitle-2">Entregados</h3>
+                            </div>
                             <div className="products__inventory">
-                                <ul>
-                                    <li>
-                                        <p>item</p>
-                                        <input type="number" />
-                                        <input type="number" />
-                                    </li>
-                                </ul>
+                                <div className="inventory__item">
+                                    <p className="inventory__item__name">item</p>
+                                    <input className="inventory__item__value-1" type="text" placeholder="0"/>
+                                    <div className="inventory__item__division"></div>
+                                    <input className="inventory__item__value-2" type="text" placeholder="0"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,11 +127,17 @@ function Responsiva() {
 
                     {/* ----------------COPY------------------ */}
                     <div className="copy main-card">
+                        
                         <h2>Copias</h2>
-                        <div className="copy__section">
+
+                        
+                        <div className="copy__paper__checkbox">
                             <label>Ingreso de papel</label>
                             <input type="checkbox" />
-                            <div>
+                        </div>
+
+                        <div className="copy__section__display">
+                            <div className="copy__section">
                                 <div className="copy__content-topLeft input-card">
                                     <input type="text" />
                                     <p>Copias B/N</p>
@@ -141,11 +155,14 @@ function Responsiva() {
                                     <p>Impresiones Color</p>
                                 </div>
                             </div>
+
                             <div className="copy__content-paper input-card">
                                 <input type="text" />
                                 <p>Papel</p>
                             </div>
                         </div>
+
+
                     </div>
 
 

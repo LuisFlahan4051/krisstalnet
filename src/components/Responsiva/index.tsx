@@ -3,7 +3,7 @@ import Responsiva from './Responsiva'
 
 function Index() {
     return (
-        <div>
+        <div className="Index-responsiva">
             <Responsiva />
         </div>
     );

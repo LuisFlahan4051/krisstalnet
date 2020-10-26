@@ -32,7 +32,11 @@ async function mainWindow() {
 
   sleep(3000).then(() => {
     const mainWindow = new BrowserWindow({
-      width: 520,
+      /*
+      width: 520, //20 de diferencia
+      height: 680, //80 de diferencia
+      */
+      width: 1100,
       height: 680,
       icon: 'public/logo192.png',
       webPreferences: {
